@@ -14,7 +14,7 @@ Please support me and the whole Community around opensource-android-Apps and vis
 This update is not an OS update but an google-play-services-update. This Updates don‘t need any agreement and you cant stop it.
 
 But: If you use an program like Waydroid, you can use install it, if you don‘t install thise services. Same for Custom-Roms like Lineage OS or Graphene OS!
-Or you can do !9! steps in the Developer-Options including an 24 hour wait to unlock sideloading aganin (more informations on keepandroidopen.org).
+Or you can do !9! steps in the Developer-Options including an 24 hour wait to unlock sideloading again (more informations on keepandroidopen.org).
 
 Porta-Browser
 Made by Joshi7479
