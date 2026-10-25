@@ -4,7 +4,7 @@ Earlier JBrowse
 The name comes from the Latin word porta wich means door. Thank´s to my classmates which helped me finding this name!
 A free, opensource Android (other Versions are planned) browser with an minimalistic Design, but colorfull!.
 
-Based on Chromium.
+Based on Gecko (The Engine behind Firefox).
 
 Please notice, that this App is not and will not be available on the Google Play store. So you have to sideload it.
 
