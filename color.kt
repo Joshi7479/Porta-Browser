@@ -67,8 +67,6 @@ class ColorActivity : AppCompatActivity() {
 
 
         findViewById<Button>(R.id.close).setOnClickListener {
-            val intent = Intent(this, Settings::class.java)
-            startActivity(intent)
             finish()
         }
         findViewById<Button>(R.id.reset).setOnClickListener {
