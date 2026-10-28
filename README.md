@@ -1,8 +1,14 @@
 # Porta-Browser
-Earlier JBrowse
+Just. Simple. Browsing!
 
 The name comes from the Latin word porta wich means door. Thank´s to my classmates which helped me finding this name!
 A free, opensource Android (other Versions are planned) browser with an minimalistic Design, but colorfull!.
+
+Another browser? Really? That is really boring!
+If you think so, I think you are wrong. Yes. For you it is just another browser, with less features than competitors.
+But for me, it is a really special thing. This browser is my way to learn how android apps work, how to develop, how to install them with high efficiency.
+And... It is not a boring browser. I wanted to make a browser that is less annoying, and I think it is. It is really minimalistic, but minimalistic should
+not mean black and white. There should be colors. And so is my browser. Basic features, User friendly UI. Just. Simple. Browsing!
 
 Based on Gecko (The Engine behind Firefox).
 
