@@ -4,67 +4,55 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/black"
     android:background="@color/black"
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="18sp"
-        android:text="PORTA-Browser"/>
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tabbar"
-            android:background="@color/black"
-            app:tabMode="scrollable"
-            app:tabGravity="fill"/>
-
-    </LinearLayout>
-
-    <LinearLayout
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:background="@color/black"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextColor="#AAAAAA" />
+
+    <LinearLayout
+        android:id="@+id/urltop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
             android:id="@+id/newtab"
-            android:text="+"/>
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:text="@string/plus" />
 
         <EditText
             android:id="@+id/urlBar"
-            android:singleLine="true"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="URL or search"
+            android:hint="@string/urlbarhint"
             android:imeOptions="actionGo"
-            android:inputType="textUri" />
+            android:inputType="textUri"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textColorHint="#888888" />
 
         <Button
             android:id="@+id/hide"
             android:layout_width="70dp"
             android:layout_height="50dp"
-            android:text="☰"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            android:text="@string/burgermenu" />
 
     </LinearLayout>
 
@@ -78,110 +66,268 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
         <org.mozilla.geckoview.GeckoView
             android:id="@+id/webView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:visibility="visible"
             android:layout_weight="1" />
 
-        <TableLayout
-            android:layout_width="70dp"
-            android:id="@+id/tablerow"
+        <LinearLayout
+            android:id="@+id/bookmarkside"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/bookmarktitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/bookmarktitlehint"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textColorHint="#888888" />
+
+            <EditText
+                android:id="@+id/bookmarkurl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/bookmarkurlhint"
+                android:inputType="textUri"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textColorHint="#888888" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/bookmarkadd"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/save" />
+
+                <Button
+                    android:id="@+id/bookmarkdone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/done" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/bookmarkempty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="@string/bookmarkempty"
+                android:textColor="#AAAAAA"
+                android:visibility="gone" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:id="@+id/bookmarklist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cookieside"
             android:visibility="gone"
-            android:layout_height="match_parent">
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/resetcookies"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/resetcookies" />
+
+            <Button
+                android:id="@+id/cookiedone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/done" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/history"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/historytitle"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/historyside"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/historydone"
+                    android:text="@string/done"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/historyreset"
+                    android:text="@string/reset"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/historyempty"
+                    android:text="@string/nohistory"/>
+
+            </LinearLayout>
 
 
 
-            <TableRow
-                android:layout_height="match_parent"
-                android:layout_width="match_parent">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/historylayout"/>
+
+            </ScrollView>
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/tablerow"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <Button
                     android:id="@+id/btnBack"
-                    android:layout_weight="0.5"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:text="←" />
-            </TableRow>
+                    android:text="@string/back" />
 
-            <TableRow
-                android:layout_height="match_parent"
-                android:layout_width="match_parent">
                 <Button
                     android:id="@+id/btnReload"
-                    android:layout_weight="0.5"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:text="⟳"  />
-            </TableRow>
+                    android:text="@string/reload"/>
 
-            <TableRow
-                android:layout_height="30dp"
-                android:layout_width="0dp">
                 <Button
                     android:id="@+id/btnForward"
-                    android:layout_weight="0.5"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="→" />
-            </TableRow>
+                    android:layout_height="50dp"
+                    android:text="@string/forward" />
 
-            <TableRow
-                android:layout_height="match_parent"
-                android:layout_width="match_parent">
+                <Button
+                    android:id="@+id/bookmarks"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="@string/bookmarks" />
+
                 <Button
                     android:id="@+id/home"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="⌂" />
-            </TableRow>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="@string/home" />
 
-            <TableRow
-                android:layout_height="match_parent"
-                android:layout_width="match_parent">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/historysymbol"
+                    android:id="@+id/historybutton"/>
+
                 <Button
                     android:id="@+id/settings"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="⚙" />
-            </TableRow>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="@string/settings" />
 
-            <TableRow
-                android:layout_height="match_parent"
-                android:layout_width="match_parent">
+                <Button
+                    android:id="@+id/cookie"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="🍪" />
+
                 <Button
                     android:id="@+id/github"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:text="Git" />
-            </TableRow>
 
-
-
-
-        </TableLayout>
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/bottomBar"
+        android:id="@+id/bottomBar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/black"
         android:orientation="horizontal"
-        android:background="#000000">
+        android:visibility="gone">
 
-        <TextView
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/newtab2"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:text="@string/plus" />
+
+        <EditText
+            android:id="@+id/urlBar2"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Made by Joshi7479"/>
+            android:layout_weight="1"
+            android:hint="@string/urlbarhint"
+            android:imeOptions="actionGo"
+            android:inputType="textUri"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textColorHint="#888888" />
+
+        <Button
+            android:id="@+id/hide2"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:text="@string/burgermenu" />
 
     </LinearLayout>
+
+
 
 </LinearLayout>

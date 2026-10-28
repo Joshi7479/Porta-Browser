@@ -3,57 +3,49 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@color/black"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="18sp"
-            android:layout_height="wrap_content"
-            android:text="\nPORTA-Browser: Settings"/>
-
-    </LinearLayout>
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/settingstitle"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal">
-
-
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp">
 
         <Button
             android:id="@+id/keyboard"
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:layout_height="40dp"
-            android:text="⌨" />
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:text="@string/keyboard" />
+
         <EditText
             android:id="@+id/test"
-            android:layout_width="280dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:hint="SearchEngine (e.g. https://().com)"
+            android:layout_weight="1"
+            android:hint="@string/searchenginehint"
             android:imeOptions="actionGo"
             android:inputType="textUri"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textColorHint="#888888" />
+
         <Button
             android:id="@+id/save"
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:layout_height="40dp"
-            android:text="💾" />
-
-
-
-
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:text="@string/saveunicode" />
 
     </LinearLayout>
 
@@ -61,64 +53,54 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="16dp"
         android:orientation="vertical">
-
-
-
-
 
         <Button
             android:id="@+id/reset"
             android:layout_width="match_parent"
-            android:layout_gravity="center"
             android:layout_height="50dp"
-            android:text="Reset search engine to SearXNG" />
+            android:text="@string/resetsearxng" />
 
         <Button
             android:id="@+id/ddg"
             android:layout_width="match_parent"
-            android:layout_gravity="center"
             android:layout_height="50dp"
-            android:text="Use DuckDuckGo instaed" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\n"/>
+            android:text="@string/setduckduckgo" />
 
         <Button
             android:id="@+id/color"
             android:layout_width="match_parent"
-            android:layout_gravity="center"
             android:layout_height="50dp"
-            android:text="Color-Theme" />
+            android:layout_marginTop="24dp"
+            android:text="@string/colortheme" />
 
-
-
-        <TextView
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/urlwhere"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="\n"/>
-
-
-
-
+            android:layout_marginTop="24dp"
+            android:checked="false"
+            android:text="@string/urlpositionsethint"
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
-    <LinearLayout
+
+    <Button
+        android:id="@+id/close"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/done" />
 
-        <Button
-            android:id="@+id/close"
-            android:layout_width="match_parent"
-            android:layout_gravity="center"
-            android:layout_height="50dp"
-            android:text="Done!" />
+    <TextView
+        android:id="@+id/bottomBar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:gravity="center"
+        android:text="@string/madeybyme"
+        android:textColor="@android:color/white" />
 
-
-    </LinearLayout>
 </LinearLayout>
-
-
