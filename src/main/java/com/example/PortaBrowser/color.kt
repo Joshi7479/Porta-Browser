@@ -51,8 +51,8 @@ class ColorActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val preferences = dataStore.data.first()
-                selectedColorHex = preferences[USER_COLOR_KEY] ?: "#6750A4"
-                selectedtextcolorhex = preferences[USER_TEXT_COLOR_THEME] ?: "#000000"
+                selectedColorHex = preferences[USER_COLOR_KEY] ?: "#448AFF"
+                selectedtextcolorhex = preferences[USER_TEXT_COLOR_THEME] ?: "#FFFFFF"
 
                 val colorInt = AndroidColor.parseColor(selectedColorHex)
                 colorPreview.setBackgroundColor(colorInt)
@@ -69,13 +69,13 @@ class ColorActivity : AppCompatActivity() {
                 saveColorToDataStore(selectedColorHex)
 
             } catch (e: IllegalArgumentException) {
-                Toast.makeText(this, "Sorry: Something went wrong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Sorry! But Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }
 
         reset.setOnClickListener {
-            val defaultHex = "#F00000"
-            val defaulttextHex = "#000000"
+            val defaultHex = "#448AFF"
+            val defaulttextHex = "#FFFFFF"
             selectedColorHex = defaultHex
             selectedtextcolorhex = defaulttextHex
             val colorInt = AndroidColor.parseColor(defaultHex)

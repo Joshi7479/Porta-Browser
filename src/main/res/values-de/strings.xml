@@ -46,4 +46,5 @@
     <string name="textpreview">Vorschau</string>
     <string name="welcomecolor">Möchtest du erstmal dein Farben einstellen?</string>
     <string name="privatemode">Inkognito-Modus</string>
+    <string name="cookiehint">Hier kannst du die Cookies zurücksetzen. Mhmm... Lecker!</string>
 </resources>

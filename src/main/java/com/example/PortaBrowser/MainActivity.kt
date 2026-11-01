@@ -228,7 +228,8 @@ class MainActivity : AppCompatActivity() {
         alleButtons = listOf(
             buttonBack, buttonReload, buttonHome, buttonForward,
             buttonSettings, buttonhide, buttonNewTab, buttonhide2,
-            buttonNewTab2, buttongit, bookmarkdone, bookmarkadd, bookmark, buttonhistory, cookiebutton,
+            buttonNewTab2, buttongit, bookmarkdone, bookmarkadd,
+            bookmark, buttonhistory, cookiebutton, Cookiedone, cookieclear,
         )
 
         buttongit.setOnClickListener {

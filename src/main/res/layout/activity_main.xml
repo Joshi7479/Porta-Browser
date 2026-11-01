@@ -26,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"
+        app:tabIndicatorColor="#00F0F0"
         app:tabMode="scrollable"
         app:tabSelectedTextColor="@android:color/white"
         app:tabTextColor="#AAAAAA" />
@@ -159,21 +160,44 @@
             android:layout_height="wrap_content"
             android:id="@+id/cookieside"
             android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/resetcookies"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/resetcookies" />
+                android:textSize="100sp"
+                android:textColor="#00F0F0"
+                android:gravity="center"
+                android:text="@string/cookie"/>
 
-            <Button
-                android:id="@+id/cookiedone"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/done" />
+                android:textColor="#F00000"
+                android:gravity="center"
+                android:text="@string/cookiehint"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/resetcookies"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/resetcookies" />
+
+                <Button
+                    android:id="@+id/cookiedone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/done" />
+
+            </LinearLayout>
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -333,7 +357,4 @@
             android:text="@string/burgermenu" />
 
     </LinearLayout>
-
-
-
 </LinearLayout>

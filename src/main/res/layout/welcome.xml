@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:visibility="gone"
+        android:textColor="@color/blue_A200"
         android:gravity="center"
         android:id="@+id/portaschriftzug"/>
     <ImageView
@@ -27,10 +28,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="18sp"
+        android:textColor="@color/blue_A200"
         android:text="@string/welcometitle"/>
 
     <TextView
         android:layout_width="match_parent"
+        android:gravity="center"
         android:layout_height="wrap_content"
         android:text="@string/logohidehint"/>
 
@@ -49,6 +52,7 @@
             android:layout_gravity="center_horizontal"
             android:textAlignment="center"
             android:textSize="14sp"
+            android:textColor="@color/blue_A200"
             android:text="@string/tabbarhintonwelcomescreen"/>
     </LinearLayout>
 
@@ -64,6 +68,7 @@
             android:id="@+id/newtab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="#F00000"
             android:text="@string/plus"/>
 
         <EditText
@@ -79,6 +84,7 @@
         <Button
             android:id="@+id/hide"
             android:layout_width="wrap_content"
+            android:backgroundTint="#F00000"
             android:layout_height="wrap_content"
             android:text="@string/burgermenu"/>
     </LinearLayout>
@@ -88,6 +94,7 @@
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
+        android:backgroundTint="#F00000"
         android:layout_height="4dp"
         android:visibility="gone" />
 
@@ -111,13 +118,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_marginTop="8dp"
+                android:textColor="@color/blue_A200"
                 android:text="@string/welcomemessage" />
 
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue_A200"
+                android:textColor="#F00000"
                 android:id="@+id/welcomecolor"
                 android:text="@string/welcomecolor"/>
 
@@ -130,6 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textColor="@color/blue_A200"
                 android:text="@string/startporta"/>
 
             <TextView
@@ -139,6 +151,8 @@
 
             <com.google.android.material.slider.Slider
                 android:layout_width="match_parent"
+                app:thumbColor="#00F0F0"
+                app:trackColor="#F00000"
                 android:layout_height="wrap_content"
                 android:id="@+id/startporta"
                 app:labelBehavior="gone"

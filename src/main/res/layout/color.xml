@@ -41,12 +41,14 @@
         android:layout_width="200dp"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
+        android:backgroundTint="#00F0F0"
         android:text="@string/choosecolor" />
 
     <Button
         android:id="@+id/choosetextcolor"
         android:layout_width="200dp"
         android:layout_gravity="center"
+        android:backgroundTint="#00F0F0"
         android:layout_height="wrap_content"
         android:text="@string/choosetextcolor" />
 
@@ -55,6 +57,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:backgroundTint="#00F0F0"
         android:layout_marginTop="16dp"
         android:text="Apply Color" />
 
@@ -63,6 +66,7 @@
         android:id="@+id/reset"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="#448AFF"
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
         android:text="@string/reset" />
@@ -72,6 +76,7 @@
         android:id="@+id/close"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:backgroundTint="#F00000"
         android:layout_marginTop="32dp"
         android:text="@string/done" />
 

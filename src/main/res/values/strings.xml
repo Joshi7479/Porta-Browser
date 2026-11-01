@@ -46,4 +46,5 @@
     <string name="textpreview">Preview</string>
     <string name="welcomecolor">Do you wan´t to set colors first?</string>
     <string name="privatemode">Incognito-Mode</string>
+    <string name="cookiehint">Here you can reset the cookies!</string>
 </resources>

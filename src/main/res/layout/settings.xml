@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,7 +21,7 @@
         android:gravity="center"
         android:padding="16dp"
         android:text="@string/settingstitle"
-        android:textColor="@android:color/white"
+        android:textColor="#F00000"
         android:textSize="18sp" />
 
     <LinearLayout
@@ -34,6 +35,7 @@
             android:id="@+id/keyboard"
             android:layout_width="60dp"
             android:layout_height="50dp"
+            android:backgroundTint="@color/blue_A200"
             android:text="@string/keyboard" />
 
         <EditText
@@ -52,6 +54,7 @@
             android:id="@+id/save"
             android:layout_width="60dp"
             android:layout_height="50dp"
+            android:backgroundTint="@color/blue_A200"
             android:text="@string/saveunicode" />
 
     </LinearLayout>
@@ -67,18 +70,21 @@
             android:id="@+id/reset"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:backgroundTint="@color/blue_A200"
             android:text="@string/resetsearxng" />
 
         <Button
             android:id="@+id/ddg"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:backgroundTint="@color/blue_A200"
             android:text="@string/setduckduckgo" />
 
         <Button
             android:id="@+id/color"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:backgroundTint="@color/blue_A200"
             android:layout_marginTop="24dp"
             android:text="@string/colortheme" />
 
@@ -87,6 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/rerunsetup"
+            android:backgroundTint="@color/blue_A200"
             android:id="@+id/rerunsetup"/>
 
         <androidx.appcompat.widget.SwitchCompat
@@ -95,8 +102,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:checked="false"
+            app:thumbTint="#F00000"
+            app:trackTint="@color/blue_A200"
             android:text="@string/urlpositionsethint"
-            android:textColor="#FFFFFF" />
+            android:textColor="#F00000" />
 
     </LinearLayout>
 
@@ -106,6 +115,7 @@
         android:layout_height="50dp"
         android:layout_marginHorizontal="8dp"
         android:layout_marginTop="24dp"
+        android:backgroundTint="#00F0F0"
         android:text="@string/done" />
 
     <TextView
