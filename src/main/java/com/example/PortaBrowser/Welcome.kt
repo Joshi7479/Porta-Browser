@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.slider.Slider
+import android.widget.Button
 
 class Welcome : AppCompatActivity() {
 
@@ -25,6 +26,11 @@ class Welcome : AppCompatActivity() {
         portaschriftzug.setOnClickListener {
             portaschriftzug.visibility = View.GONE
             portalogo.visibility = View.VISIBLE
+        }
+
+        val welcomecolor = findViewById<Button>(R.id.welcomecolor)
+        welcomecolor.setOnClickListener{
+            startActivity(android.content.Intent(this, ColorActivity::class.java))
         }
 
         val startporta = findViewById<Slider>(R.id.startporta)

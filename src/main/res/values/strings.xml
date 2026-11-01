@@ -30,18 +30,20 @@
     <string name="reset">Reset</string>
     <string name="welcometitle">Welcome to Porta-Browser!</string>
     <string name="tabbarhintonwelcomescreen">Here will be the Tab-bar. To close a Tab, click and hold it. To create a new one, use the Button below!</string>
-    <string name="welcomemessage">The other Button is for the Sidebar with a lot of useful tools. Like go a side further, reload, etc.\n\nNote: This Browser is under development! Like this side.\n\n\n\n\n\n\n</string>
-    <string name="startbutton">Start using Porta!</string>
+    <string name="welcomemessage">The other Button is for the Sidebar with a lot of useful tools. Like go a side further, reload, etc.\n\n\n\n\n\n\n\n\n</string>
+    <string name="startbutton">\nStart using Porta!</string>
     <string name="bookmarkempty">No Bookmarks yet...</string>
     <string name="cookie">🍪</string>
     <string name="resetcookies">Reset Cookies</string>#
     <string name="historysymbol">📜</string>
     <string name="historytitle">Search-history</string>
     <string name="nohistory">No History</string>
-    <string name="startporta">Start using Porta</string>
+    <string name="startporta">The color get´s applied after the Setup is finished...\n\nStart using Porta</string>
     <string name="rerunsetup">Rerun Setup</string>
     <string name="logohidehint">If you don`t wan´t to see the Icon all the Time, just click on it.</string>
     <string name="choosecolor">Choose the color</string>
     <string name="choosetextcolor">Choose the textcolor</string>
     <string name="textpreview">Preview</string>
+    <string name="welcomecolor">Do you wan´t to set colors first?</string>
+    <string name="privatemode">Incognito-Mode</string>
 </resources>

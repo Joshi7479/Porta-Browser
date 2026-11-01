@@ -2,8 +2,6 @@ package com.example.PortaBrowser
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
@@ -64,9 +62,6 @@ class Settings : AppCompatActivity() {
                 true
             } else false
         }
-
-
-
         findViewById<Button>(R.id.save).setOnClickListener {
             saveSearchEngine(searchEngineInput.text.toString())
         }
@@ -86,6 +81,7 @@ class Settings : AppCompatActivity() {
         findViewById<Button>(R.id.color).setOnClickListener {
             startActivity(android.content.Intent(this, ColorActivity::class.java))
         }
+
 
         findViewById<Button>(R.id.keyboard).setOnClickListener {
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)

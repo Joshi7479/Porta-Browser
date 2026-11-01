@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -113,16 +114,34 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/welcomemessage" />
 
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/welcomecolor"
+                android:text="@string/welcomecolor"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:text="@string/newline"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="@string/startporta"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/newline"/>
 
             <com.google.android.material.slider.Slider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/startporta"
+                app:labelBehavior="gone"
                 android:valueFrom="0.0"
                 android:value="0.0"
                 android:valueTo="1.0"/>

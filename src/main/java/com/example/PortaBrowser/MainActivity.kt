@@ -305,6 +305,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.hide).visibility = browserVis
         findViewById<Button>(R.id.newtab).visibility = browserVis
         findViewById<Button>(R.id.newtab2).visibility = browserVis
+        findViewById<Button>(R.id.historyreset).visibility = browserVis
         historySide.visibility = if (show) View.VISIBLE else View.GONE
 
         historyJob?.cancel()
