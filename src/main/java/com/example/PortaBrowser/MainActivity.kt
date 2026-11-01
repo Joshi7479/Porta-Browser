@@ -39,9 +39,6 @@ import androidx.room.Room
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-
-
-
 class MainActivity : AppCompatActivity() {
 
     private val db by lazy {
@@ -55,13 +52,8 @@ class MainActivity : AppCompatActivity() {
         private const val BOOKMARKS_KEY = "bookmarks"
         private var sRuntime: GeckoRuntime? = null
     }
-
     private var standart_suchmaschine_url = "https://searx.tiekoetter.com"
-
     private var urlwhere = "top"
-
-
-
     private lateinit var geckoView: GeckoView
     private lateinit var urlBar: EditText
     private lateinit var urlBar2: EditText
@@ -74,13 +66,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cookiebutton: Button
     private lateinit var Cookieside: LinearLayout
     private lateinit var alleButtons: List<Button>
-
-
     private data class Bookmark(val title: String, val url: String)
-
     private val bookmarkList = mutableListOf<Bookmark>()
     private val historyList = mutableListOf<GeckoSession.HistoryDelegate.HistoryList>()
     private var buttonColor: Int? = null
+    private var textcolor: Int? = null
     private lateinit var bookmarkSide: LinearLayout
     private lateinit var bookmarkTitle: EditText
     private lateinit var bookmarkUrl: EditText
@@ -90,7 +80,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var historyListContainer: LinearLayout
     private lateinit var historyEmpty: TextView
     private var historyJob: Job? = null
-
     private class BrowserTab(
         var url: String,
         var title: String = DEFAULT_TAB_TITLE
@@ -100,21 +89,15 @@ class MainActivity : AppCompatActivity() {
         var canGoBack = false
         var canGoForward = false
     }
-
     private val tabs = mutableListOf<BrowserTab>()
     private var currentIndex = -1
     private var ignoreSelection = false
-
     private val currentTab: BrowserTab?
         get() = tabs.getOrNull(currentIndex)
-
-
 
     private fun getRuntime(): GeckoRuntime {
         return sRuntime ?: GeckoRuntime.getDefault(applicationContext).also { sRuntime = it }
     }
-
-
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -139,10 +122,6 @@ class MainActivity : AppCompatActivity() {
             sharedPref.edit().putBoolean("isFirstRun", false).apply()
         }
 
-
-
-
-
         cookiebutton = findViewById(R.id.cookie)
         geckoView = findViewById(R.id.webView)
         urlBar = findViewById(R.id.urlBar)
@@ -153,7 +132,6 @@ class MainActivity : AppCompatActivity() {
         topurl = findViewById(R.id.urltop)
         bottomBar = findViewById(R.id.bottomBar1)
         bookmark = findViewById(R.id.bookmarks)
-
 
         getRuntime()
 
@@ -172,7 +150,6 @@ class MainActivity : AppCompatActivity() {
                 true
             } else false
         }
-
 
         val buttongit = findViewById<Button>(R.id.github)
         val buttonBack = findViewById<Button>(R.id.btnBack)
@@ -209,12 +186,8 @@ class MainActivity : AppCompatActivity() {
                 StorageController.ClearFlags.COOKIES)
         tablerow.visibility = View.GONE}
 
-
-
-
         buttonhistory.setOnClickListener { setHistoryMode(true) }
         historydone.setOnClickListener { setHistoryMode(false) }
-
 
         Cookieside = findViewById(R.id.cookieside)
         bookmarkSide = findViewById(R.id.bookmarkside)
@@ -228,8 +201,6 @@ class MainActivity : AppCompatActivity() {
         bookmark.setOnClickListener { setBookmarkMode(true) }
         bookmarkdone.setOnClickListener { setBookmarkMode(false) }
         bookmarkadd.setOnClickListener { saveBookmarkFromInputs() }
-
-
 
         cookiebutton.setOnClickListener {
             tablerow.visibility = View.GONE
@@ -283,7 +254,6 @@ class MainActivity : AppCompatActivity() {
         }
         buttonhide.setOnClickListener(toggleTabRow)
         buttonhide2.setOnClickListener(toggleTabRow)
-
         buttonNewTab.setOnClickListener { addTab(standart_suchmaschine_url) }
         buttonNewTab2.setOnClickListener { addTab(standart_suchmaschine_url) }
 
@@ -363,10 +333,16 @@ class MainActivity : AppCompatActivity() {
             updateUrlBarPosition()
 
             val gespeicherteFarbe = preferences[USER_COLOR_KEY]
+            val gespeichertetextfarbe = preferences[USER_TEXT_COLOR_THEME]
             if (!gespeicherteFarbe.isNullOrEmpty()) {
                 val parsedColor = Color.parseColor(gespeicherteFarbe)
                 buttonColor = parsedColor
                 alleButtons.forEach { it.backgroundTintList = ColorStateList.valueOf(parsedColor) }
+            }
+            if (!gespeichertetextfarbe.isNullOrEmpty()) {
+                val parsedColor2 = Color.parseColor(gespeichertetextfarbe)
+                textcolor = parsedColor2
+                alleButtons.forEach { it.setTextColor(ColorStateList.valueOf(parsedColor2))  }
             }
         } catch (e: Exception) {
             Log.e(TAG, "applySettings failed", e)
@@ -389,10 +365,7 @@ class MainActivity : AppCompatActivity() {
         }
         currentTab?.session?.loadUri(url)
     }
-
-
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
-
     private fun loadBookmarks() {
         bookmarkList.clear()
         try {
@@ -407,16 +380,11 @@ class MainActivity : AppCompatActivity() {
             Log.e(TAG, "loading Bookmarks failed", e)
         }
     }
-
-
-
     private fun saveBookmarks() {
         val arr = JSONArray()
         bookmarkList.forEach { arr.put(JSONObject().put("title", it.title).put("url", it.url)) }
         getSharedPreferences("AppPrefs", Context.MODE_PRIVATE).edit().putString(BOOKMARKS_KEY, arr.toString()).apply()
     }
-
-
     private fun setBookmarkMode(show: Boolean) {
         val browserVis = if (show) View.GONE else View.VISIBLE
         geckoView.visibility = browserVis
@@ -441,9 +409,6 @@ class MainActivity : AppCompatActivity() {
                 .hideSoftInputFromWindow(bookmarkTitle.windowToken, 0)
         }
     }
-
-
-
     private fun saveBookmarkFromInputs() {
         var url = bookmarkUrl.text.toString().trim()
         if (url.isEmpty()) {
@@ -461,7 +426,6 @@ class MainActivity : AppCompatActivity() {
         refreshBookmarkList()
         Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show()
     }
-
     private fun refreshBookmarkList() {
         bookmarkListContainer.removeAllViews()
         bookmarkEmpty.visibility = if (bookmarkList.isEmpty()) View.VISIBLE else View.GONE
@@ -516,9 +480,6 @@ class MainActivity : AppCompatActivity() {
             bookmarkListContainer.addView(row)
         }
     }
-
-
-
     private fun renderHistory(entries: List<HistoryEntry>) {
         historyListContainer.removeAllViews()
         historyEmpty.visibility = if (entries.isEmpty()) View.VISIBLE else View.GONE

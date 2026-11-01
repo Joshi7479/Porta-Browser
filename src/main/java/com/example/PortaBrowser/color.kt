@@ -1,10 +1,9 @@
 package com.example.PortaBrowser
 
-import android.graphics.Color as AndroidColor // Eindeutiger Alias gegen Namenskonflikte
+import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.edit
@@ -12,66 +11,83 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-
-
-
 class ColorActivity : AppCompatActivity() {
-
     private lateinit var colorPreview: View
-    private lateinit var colorInput: EditText
+    private var selectedColorHex: String = "#6750A4"
+    private var selectedtextcolorhex: String = "#FFFFFF"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.color)
 
         colorPreview = findViewById(R.id.colorPreview)
-        colorInput = findViewById(R.id.colorInput)
         val applyButton = findViewById<Button>(R.id.applyColorButton)
+        val reset = findViewById<Button>(R.id.reset)
+        val choosecolor = findViewById<Button>(R.id.choosecolor)
+        val choosetextcolor = findViewById<Button>(R.id.choosetextcolor)
+
+        choosecolor.setOnClickListener {
+            com.github.dhaval2404.colorpicker.ColorPickerDialog
+                .Builder(this)
+                .setTitle("Buttons")
+                .setColorListener { color, colorHex ->
+                    selectedColorHex = colorHex
+                    colorPreview.setBackgroundColor(color)
+                }
+                .show()
+        }
+
+        choosetextcolor.setOnClickListener {
+            com.github.dhaval2404.colorpicker.ColorPickerDialog
+                .Builder(this)
+                .setTitle("Text")
+                .setColorListener { color, colorHex2 ->
+                    selectedtextcolorhex = colorHex2
+                }
+                .show()
+        }
 
 
         lifecycleScope.launch {
             try {
                 val preferences = dataStore.data.first()
-                val savedColorString = preferences[USER_COLOR_KEY] ?: "#6750A4"
+                selectedColorHex = preferences[USER_COLOR_KEY] ?: "#6750A4"
+                selectedtextcolorhex = preferences[USER_TEXT_COLOR_THEME] ?: "#000000"
 
-                val colorInt = AndroidColor.parseColor(savedColorString)
+                val colorInt = AndroidColor.parseColor(selectedColorHex)
                 colorPreview.setBackgroundColor(colorInt)
-                colorInput.setText(savedColorString)
             } catch (e: Exception) {
                 colorPreview.setBackgroundColor(AndroidColor.GRAY)
             }
         }
 
-
         applyButton.setOnClickListener {
-            val hexCode = colorInput.text.toString().trim()
-            val formattedHex = if (!hexCode.startsWith("#")) "#$hexCode" else hexCode
-
             try {
-
-                val colorInt = AndroidColor.parseColor(formattedHex)
+                val colorInt = AndroidColor.parseColor(selectedColorHex)
                 colorPreview.setBackgroundColor(colorInt)
-
-
-                saveColorToDataStore(formattedHex)
+                saveTextColorToDataStore(selectedtextcolorhex)
+                saveColorToDataStore(selectedColorHex)
 
             } catch (e: IllegalArgumentException) {
-                colorInput.error = "Wrong Hex-Code!"
-                Toast.makeText(this, "Please use an real Hex-Code!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Sorry: Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }
 
+        reset.setOnClickListener {
+            val defaultHex = "#F00000"
+            val defaulttextHex = "#000000"
+            selectedColorHex = defaultHex
+            selectedtextcolorhex = defaulttextHex
+            val colorInt = AndroidColor.parseColor(defaultHex)
+            colorPreview.setBackgroundColor(colorInt)
+            saveColorToDataStore(defaultHex)
+            saveTextColorToDataStore(defaulttextHex)
+        }
 
         findViewById<Button>(R.id.close).setOnClickListener {
             finish()
         }
-        findViewById<Button>(R.id.reset).setOnClickListener {
-            val resetcolor = AndroidColor.parseColor("#800080")
-            saveColorToDataStore("800080")
-            colorPreview.setBackgroundColor(800080)
-        }
     }
-
 
     private fun saveColorToDataStore(color: String) {
         lifecycleScope.launch {
@@ -80,6 +96,18 @@ class ColorActivity : AppCompatActivity() {
                     preferences[USER_COLOR_KEY] = color
                 }
                 Toast.makeText(this@ColorActivity, "Color saved!", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(this@ColorActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun saveTextColorToDataStore(textcolor : String) {
+        lifecycleScope.launch {
+            try {
+                dataStore.edit { preferences ->
+                    preferences[USER_TEXT_COLOR_THEME] = textcolor
+                }
+
             } catch (e: Exception) {
                 Toast.makeText(this@ColorActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
             }

@@ -41,5 +41,7 @@
     <string name="startporta">Starte mit Porta</string>
     <string name="rerunsetup">Einführung wiederholen</string>
     <string name="logohidehint">Wenn du das Logo nicht immer sehen willst, kannst du einfach darauf tippen.</string>
-
+    <string name="choosecolor">Farbe wählen</string>
+    <string name="choosetextcolor">Textfarbe wählen</string>
+    <string name="textpreview">Vorschau</string>
 </resources>

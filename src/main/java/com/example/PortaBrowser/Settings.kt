@@ -2,15 +2,14 @@ package com.example.PortaBrowser
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -25,6 +24,7 @@ val Context.dataStore by preferencesDataStore(name = "settings")
 val MEIN_STRING_KEY = stringPreferencesKey("standart_suchmaschine")
 val USER_COLOR_KEY = stringPreferencesKey("user_color")
 val USER_URL_BAR = stringPreferencesKey("user_url_bar")
+val USER_TEXT_COLOR_THEME = stringPreferencesKey("user_text_color_theme")
 
 class Settings : AppCompatActivity() {
 
@@ -120,7 +120,6 @@ class Settings : AppCompatActivity() {
     private fun saveUrlBarPosition(toporbottom: String) {
         lifecycleScope.launch {
             try {
-                // WICHTIG: eigener Key (USER_URL_BAR), nicht MEIN_STRING_KEY!
                 dataStore.edit { it[USER_URL_BAR] = toporbottom }
                 Toast.makeText(this@Settings, "Saved!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
@@ -129,4 +128,5 @@ class Settings : AppCompatActivity() {
             }
         }
     }
+
 }
