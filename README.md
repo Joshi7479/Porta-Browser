@@ -1,3 +1,4 @@
+<img width="1493" height="763" alt="portalogoundschriftzug" src="https://github.com/user-attachments/assets/6af934b9-9385-4116-9ed2-6551b346d4ca" />
 # Porta-Browser
 Just. Simple. Browsing!
 
