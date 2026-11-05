@@ -2,6 +2,7 @@ package com.example.PortaBrowser
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
@@ -17,12 +18,16 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import android.graphics.Color as AndroidColor
+import com.google.android.material.slider.Slider
 
 val Context.dataStore by preferencesDataStore(name = "settings")
 val MEIN_STRING_KEY = stringPreferencesKey("standart_suchmaschine")
 val USER_COLOR_KEY = stringPreferencesKey("user_color")
 val USER_URL_BAR = stringPreferencesKey("user_url_bar")
 val USER_TEXT_COLOR_THEME = stringPreferencesKey("user_text_color_theme")
+val USER_COLOR2_KEY = stringPreferencesKey("user_color2")
+val USER_COLOR3_KEY = stringPreferencesKey("user_color3")
 
 class Settings : AppCompatActivity() {
 
@@ -47,6 +52,25 @@ class Settings : AppCompatActivity() {
             prefs[MEIN_STRING_KEY]?.takeIf { it.startsWith("http") }?.let {
                 searchEngineInput.setText(it)
             }
+            val selectedColorHex = prefs[USER_COLOR_KEY] ?: "#448AFF"
+            val selectedtextcolorhex = prefs[USER_TEXT_COLOR_THEME] ?: "#FFFFFF"
+            val selectedColorHex2 = prefs[USER_COLOR2_KEY] ?: "#00F0F0"
+            val colorInt = AndroidColor.parseColor(selectedColorHex)
+            val colorInt2 = AndroidColor.parseColor(selectedColorHex2)
+            val TextColorInt = AndroidColor.parseColor(selectedtextcolorhex)
+            rerunsetup.setBackgroundColor(colorInt)
+            findViewById<Button>(R.id.save).setBackgroundColor(colorInt2)
+            findViewById<Button>(R.id.keyboard).setBackgroundColor(colorInt2)
+            findViewById<Button>(R.id.reset).setBackgroundColor(colorInt)
+            findViewById<Button>(R.id.ddg).setBackgroundColor(colorInt)
+            findViewById<Button>(R.id.color).setTextColor(TextColorInt)
+            findViewById<SwitchCompat>(R.id.urlwhere).setTextColor(TextColorInt)
+            findViewById<Button>(R.id.save).setTextColor(TextColorInt)
+            findViewById<Button>(R.id.keyboard).setTextColor(TextColorInt)
+            findViewById<Button>(R.id.reset).setTextColor(TextColorInt)
+            findViewById<Button>(R.id.ddg).setTextColor(TextColorInt)
+            findViewById<Button>(R.id.keyboard).setTextColor(TextColorInt)
+            rerunsetup.setTextColor(TextColorInt)
             urlwhere.isChecked = prefs[USER_URL_BAR] == "down"
 
             urlwhere.setOnCheckedChangeListener { _, isChecked ->
@@ -85,6 +109,8 @@ class Settings : AppCompatActivity() {
 
         findViewById<Button>(R.id.keyboard).setOnClickListener {
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+        }
+        lifecycleScope.launch {
         }
     }
 
