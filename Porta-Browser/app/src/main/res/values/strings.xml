@@ -41,7 +41,9 @@
     <string name="startporta">The color get´s applied after the Setup is finished...\n\nStart using Porta</string>
     <string name="rerunsetup">Rerun Setup</string>
     <string name="logohidehint">If you don`t wan´t to see the Icon all the Time, just click on it.</string>
-    <string name="choosecolor">Choose the color</string>
+    <string name="choosecolor">Choose the primary color</string>
+    <string name="choosecolor2">Choose the secondary color</string>
+    <string name="accentcolor">Choose the accent color</string>
     <string name="choosetextcolor">Choose the textcolor</string>
     <string name="textpreview">Preview</string>
     <string name="welcomecolor">Do you wan´t to set colors first?</string>
