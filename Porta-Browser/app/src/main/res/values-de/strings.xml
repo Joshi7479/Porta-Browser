@@ -41,7 +41,9 @@
     <string name="startporta">Die Farbe wird erst später angewendet...\n\nStarte mit Porta</string>
     <string name="rerunsetup">Einführung wiederholen</string>
     <string name="logohidehint">Wenn du das Logo nicht immer sehen willst, kannst du einfach darauf tippen.</string>
-    <string name="choosecolor">Farbe wählen</string>
+    <string name="choosecolor">Primärfarbe wählen</string>
+    <string name="choosecolor2">Sekundärfarbe wählen</string>
+    <string name="accentcolor">Akzentfarbe wählen</string>
     <string name="choosetextcolor">Textfarbe wählen</string>
     <string name="textpreview">Vorschau</string>
     <string name="welcomecolor">Möchtest du erstmal dein Farben einstellen?</string>
