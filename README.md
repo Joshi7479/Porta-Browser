@@ -16,7 +16,7 @@ Based on Gecko (The Engine behind Firefox), made in 100% Kotlin in Android Studi
 Please notice, that this App is not and will not be available on the Google Play store. So you have to sideload it. Just download the APK from the releases and open it.
 
 But Google want‘s to lock android down, so you have to do many steps to sideload apps. 
-Please support me and the whole Community around opensource-android-Apps and visit this side: <a href=https://www.keepandroidopen.org>keepandroidopen.org</a>
+Please support me and the whole Community around opensource-android-Apps and visit this side: <a href=https://keepandroidopen.org>keepandroidopen.org</a>
 
 This update is not an OS update but an google-play-services-update. This Updates don‘t need any agreement and you cant stop it.
 
