@@ -20,7 +20,7 @@
     <string name="saveunicode">💾</string>
     <string name="resetsearxng">Zurücksetzen auf SearXNG</string>
     <string name="setduckduckgo">Ich möchte DuckDuckGo nutzen</string>
-    <string name="colortheme">Knopffarbe</string>
+    <string name="colortheme">Farb-Thema</string>
     <string name="urlpositionsethint">URL-Bar nach unten verschieben</string>
     <string name="madeybyme">Programiert von Joshi7479</string>
     <string name="colortitle">Porta-Browser: Farbeinstellungen</string>
@@ -46,7 +46,8 @@
     <string name="choosecolor2">Sekundärfarbe wählen</string>
     <string name="accentcolor">Akzentfarbe wählen</string>
     <string name="choosetextcolor">Textfarbe wählen</string>
-    <string name="textpreview">Vorschau</string>
+    <string name="textpreview"> </string>
+    <string name="applycolor">Farben anwenden</string>
     <string name="welcomecolor">Möchtest du erstmal dein Farben einstellen?</string>
     <string name="clearall">Alle löschen</string>
     <string name="privatemode">Inkognito-Modus</string>

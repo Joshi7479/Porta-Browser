@@ -32,7 +32,7 @@
     <string name="reset">Reset</string>
     <string name="welcometitle">Welcome to Porta-Browser!</string>
     <string name="tabbarhintonwelcomescreen">Here will be the Tab-bar. To close a Tab, click and hold it. To create a new one, use the Button below!</string>
-    <string name="welcomemessage">The other Button is for the Sidebar with a lot of useful tools. Like go a side further, reload, etc.\n\n\n\n\n\n\n\n\n</string>
+    <string name="welcomemessage">The other Button is for the Sidebar with a lot of useful tools. Like go a side further, reload, etc.\n\n\n</string>
     <string name="startbutton">\nSwipe to start using Porta!</string>
     <string name="bookmarkempty">No Bookmarks yet...</string>
     <string name="cookie">🍪</string>
@@ -47,7 +47,8 @@
     <string name="choosecolor2">Choose the secondary color</string>
     <string name="accentcolor">Choose the accent color</string>
     <string name="choosetextcolor">Choose the textcolor</string>
-    <string name="textpreview">Preview</string>
+    <string name="textpreview"> </string>
+    <string name="applycolor">Apply Color</string>
     <string name="welcomecolor">Do you wan´t to set colors first?</string>
     <string name="privatemode">Incognito-Mode</string>
     <string name="cookiehint">Here you can reset the cookies!</string>
