@@ -98,27 +98,18 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Button
-                    android:layout_width="70dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/keyboardtoggle"
-                    android:text="@string/keyboard"/>
 
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_weight="10"
                     android:layout_height="wrap_content"
                     android:id="@+id/searchengine"
-                    android:hint="@string/comingsoon"
+                    android:imeOptions="actionGo"
+                    android:inputType="textUri"
+                    android:singleLine="true"
+                    android:hint="@string/welcomesearchenginehint"
                     android:textColorHint="#00F0F0"/>
 
-                <Button
-                    android:layout_width="70dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/savewelcome"
-                    android:text="@string/saveunicode"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
