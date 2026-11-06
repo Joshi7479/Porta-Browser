@@ -2,6 +2,7 @@ package com.example.PortaBrowser
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -19,7 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import android.graphics.Color as AndroidColor
-import com.google.android.material.slider.Slider
+import android.view.View
 
 val Context.dataStore by preferencesDataStore(name = "settings")
 val MEIN_STRING_KEY = stringPreferencesKey("standart_suchmaschine")
@@ -55,14 +58,18 @@ class Settings : AppCompatActivity() {
             val selectedColorHex = prefs[USER_COLOR_KEY] ?: "#448AFF"
             val selectedtextcolorhex = prefs[USER_TEXT_COLOR_THEME] ?: "#FFFFFF"
             val selectedColorHex2 = prefs[USER_COLOR2_KEY] ?: "#00F0F0"
+            val accentcolor = prefs[USER_COLOR3_KEY] ?: "#F00000"
             val colorInt = AndroidColor.parseColor(selectedColorHex)
             val colorInt2 = AndroidColor.parseColor(selectedColorHex2)
             val TextColorInt = AndroidColor.parseColor(selectedtextcolorhex)
+            val colorInt3 = AndroidColor.parseColor(accentcolor)
             rerunsetup.setBackgroundColor(colorInt)
+            findViewById<TextView>(R.id.settingstitle).setTextColor(colorInt3)
             findViewById<Button>(R.id.save).setBackgroundColor(colorInt2)
             findViewById<Button>(R.id.keyboard).setBackgroundColor(colorInt2)
             findViewById<Button>(R.id.reset).setBackgroundColor(colorInt)
             findViewById<Button>(R.id.ddg).setBackgroundColor(colorInt)
+            findViewById<Button>(R.id.color).setBackgroundColor(colorInt)
             findViewById<Button>(R.id.color).setTextColor(TextColorInt)
             findViewById<SwitchCompat>(R.id.urlwhere).setTextColor(TextColorInt)
             findViewById<Button>(R.id.save).setTextColor(TextColorInt)
@@ -70,6 +77,11 @@ class Settings : AppCompatActivity() {
             findViewById<Button>(R.id.reset).setTextColor(TextColorInt)
             findViewById<Button>(R.id.ddg).setTextColor(TextColorInt)
             findViewById<Button>(R.id.keyboard).setTextColor(TextColorInt)
+            findViewById<Button>(R.id.close).setTextColor(TextColorInt)
+            findViewById<Button>(R.id.close).setBackgroundColor(colorInt3)
+            findViewById<TextView>(R.id.madebyme).setTextColor(colorInt3)
+            findViewById<SwitchCompat>(R.id.urlwhere).thumbTintList = ColorStateList.valueOf(colorInt3)
+            findViewById<SwitchCompat>(R.id.urlwhere).trackTintList = ColorStateList.valueOf(colorInt)
             rerunsetup.setTextColor(TextColorInt)
             urlwhere.isChecked = prefs[USER_URL_BAR] == "down"
 
@@ -106,6 +118,18 @@ class Settings : AppCompatActivity() {
             startActivity(android.content.Intent(this, ColorActivity::class.java))
         }
 
+        val portalogo = findViewById<ImageView>(R.id.portalogo)
+        val portaschriftzug = findViewById<TextView>(R.id.portaschriftzug)
+
+        portalogo.setOnClickListener {
+            portalogo.visibility = View.GONE
+            portaschriftzug.visibility = View.VISIBLE
+        }
+
+        portaschriftzug.setOnClickListener {
+            portaschriftzug.visibility = View.GONE
+            portalogo.visibility = View.VISIBLE
+        }
 
         findViewById<Button>(R.id.keyboard).setOnClickListener {
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)

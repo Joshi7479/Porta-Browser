@@ -1,5 +1,6 @@
 package com.example.PortaBrowser
 
+import android.content.Intent
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.view.View
@@ -92,6 +93,7 @@ class ColorActivity : AppCompatActivity() {
                 val colorInt2 = AndroidColor.parseColor(selectedColorHex2)
                 val colorInt3 = AndroidColor.parseColor(selectedColorHex3)
                 val TextColorInt = AndroidColor.parseColor(selectedtextcolorhex)
+                findViewById<Button>(R.id.close).setBackgroundColor(colorInt3)
                 choosecolor.setBackgroundColor(colorInt)
                 choosetextcolor.setBackgroundColor(colorInt)
                 choosetextcolor.setTextColor(TextColorInt)
@@ -106,43 +108,52 @@ class ColorActivity : AppCompatActivity() {
         }
 
         applyButton.setOnClickListener {
-            try {
-                val colorInt = AndroidColor.parseColor(selectedColorHex)
-                colorPreview.setBackgroundColor(colorInt)
-                saveTextColorToDataStore(selectedtextcolorhex)
-                saveColorToDataStore(selectedColorHex)
-                saveColor2ToDataStore(selectedColorHex2)
-
-            } catch (e: IllegalArgumentException) {
-                Toast.makeText(this, "Sorry! But Something went wrong", Toast.LENGTH_SHORT).show()
-            }
+            apply()
         }
 
         reset.setOnClickListener {
             val defaultHex = "#448AFF"
-            val defaulttextHex = "#FFFFFF"
+            val defaulttextHex = "#000000"
             val defaultHex2 = "#00F0F0"
             val defaultHex3 = "#F00000"
             selectedColorHex = defaultHex
             selectedColorHex2 = defaultHex2
             selectedColorHex3 = defaultHex3
             selectedtextcolorhex = defaulttextHex
-            val TextcolorInt = AndroidColor.parseColor(defaultHex3)
+            val TextcolorInt = AndroidColor.parseColor(defaulttextHex)
             val colorInt = AndroidColor.parseColor(defaultHex)
             val colorInt2 = AndroidColor.parseColor(defaultHex2)
-            val colorInt3 = AndroidColor.parseColor(defaultHex2)
+            val colorInt3 = AndroidColor.parseColor(defaultHex3)
             choosetextcolor.setTextColor(TextcolorInt)
             findViewById<Button>(R.id.close).setBackgroundColor(colorInt3)
             colorPreview.setBackgroundColor(colorInt)
+            applyButton.setBackgroundColor(colorInt2)
+            reset.setBackgroundColor(colorInt)
             choosetextcolor.setBackgroundColor(colorInt)
             choosecolor.setBackgroundColor(colorInt)
             choosecolor2.setBackgroundColor(colorInt2)
+            choosecolor3.setBackgroundColor(colorInt3)
             saveColorToDataStore(defaultHex)
             saveTextColorToDataStore(defaulttextHex)
         }
 
         findViewById<Button>(R.id.close).setOnClickListener {
-            finish()
+            apply()
+            startActivity(Intent(this, Settings::class.java))
+        }
+    }
+
+    private fun apply() {
+        try {
+            val colorInt = AndroidColor.parseColor(selectedColorHex)
+            colorPreview.setBackgroundColor(colorInt)
+            saveTextColorToDataStore(selectedtextcolorhex)
+            saveColorToDataStore(selectedColorHex)
+            saveColor2ToDataStore(selectedColorHex2)
+            saveColor3ToDataStore(selectedColorHex3)
+
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(this, "Sorry! But Something went wrong", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -163,6 +174,18 @@ class ColorActivity : AppCompatActivity() {
             try {
                 dataStore.edit { preferences ->
                     preferences[USER_COLOR2_KEY] = color
+                }
+                Toast.makeText(this@ColorActivity, "Color saved!", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(this@ColorActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun saveColor3ToDataStore(color: String) {
+        lifecycleScope.launch {
+            try {
+                dataStore.edit { preferences ->
+                    preferences[USER_COLOR3_KEY] = color
                 }
                 Toast.makeText(this@ColorActivity, "Color saved!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
