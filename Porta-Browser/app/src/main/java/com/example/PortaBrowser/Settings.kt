@@ -83,6 +83,7 @@ class Settings : AppCompatActivity() {
             findViewById<TextView>(R.id.madebyme).setTextColor(colorInt3)
             findViewById<SwitchCompat>(R.id.urlwhere).thumbTintList = ColorStateList.valueOf(colorInt3)
             findViewById<SwitchCompat>(R.id.urlwhere).trackTintList = ColorStateList.valueOf(colorInt)
+            findViewById<EditText>(R.id.test).backgroundTintList = ColorStateList.valueOf(colorInt3)
             rerunsetup.setTextColor(TextColorInt)
             urlwhere.isChecked = prefs[USER_URL_BAR] == "down"
             urlwhere.setOnCheckedChangeListener { _, isChecked ->

@@ -68,12 +68,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var Cookieside: LinearLayout
     private lateinit var alleButtons: List<Button>
     private lateinit var andereButtons: List<Button>
+    private lateinit var urlbars: List<EditText>
 
     private data class Bookmark(val title: String, val url: String)
 
     private val bookmarkList = mutableListOf<Bookmark>()
     private var buttonColor: Int? = null
     private var buttonColor2: Int? = null
+    private var buttonColor3: Int? = null
     private var textcolor: Int? = null
     private lateinit var bookmarkSide: LinearLayout
     private lateinit var bookmarkTitle: EditText
@@ -241,6 +243,10 @@ class MainActivity : AppCompatActivity() {
             buttonhide, buttonhide2, buttonNewTab2, buttonNewTab,
         )
 
+        urlbars = listOf(
+            urlBar, urlBar2,
+        )
+
         buttongit.setOnClickListener {
             loadInput("github.com/Joshi7479/Porta-Browser")
             tablerow.visibility = View.GONE
@@ -341,6 +347,7 @@ class MainActivity : AppCompatActivity() {
             val gespeicherteFarbe = preferences[USER_COLOR_KEY]
             val gespeichertetextfarbe = preferences[USER_TEXT_COLOR_THEME]
             val gespeicherteFarbe2 = preferences[USER_COLOR2_KEY]
+            val gespeicherteFarbe3 = preferences[USER_COLOR3_KEY]
             if (!gespeicherteFarbe.isNullOrEmpty()) {
                 val parsedColor = Color.parseColor(gespeicherteFarbe)
                 buttonColor = parsedColor
@@ -355,6 +362,12 @@ class MainActivity : AppCompatActivity() {
                 val parsedColor3 = Color.parseColor(gespeicherteFarbe2)
                 buttonColor2 = parsedColor3
                 andereButtons.forEach { it.backgroundTintList = ColorStateList.valueOf(parsedColor3) }
+            }
+            if (!gespeicherteFarbe3.isNullOrEmpty()) {
+                val parsedColor4 = Color.parseColor(gespeicherteFarbe3)
+                buttonColor3 = parsedColor4
+                urlbars.forEach { it.backgroundTintList = ColorStateList.valueOf(parsedColor4) }
+                findViewById<TabLayout>(R.id.tabbar).setSelectedTabIndicatorColor(parsedColor4)
             }
         } catch (e: Exception) {
             Log.e(TAG, "applySettings failed", e)

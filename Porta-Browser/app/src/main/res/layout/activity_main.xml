@@ -39,12 +39,14 @@
 
         <Button
             android:id="@+id/newtab"
+            android:backgroundTint="#00F0F0"
             android:layout_width="70dp"
             android:layout_height="50dp"
             android:text="@string/plus" />
 
         <EditText
             android:id="@+id/urlBar"
+            android:backgroundTint="#F00000"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -57,6 +59,7 @@
 
         <Button
             android:id="@+id/hide"
+            android:backgroundTint="#00F0F0"
             android:layout_width="70dp"
             android:layout_height="50dp"
             android:text="@string/burgermenu" />
