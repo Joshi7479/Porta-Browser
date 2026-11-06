@@ -216,7 +216,7 @@ class MainActivity : AppCompatActivity() {
             buttonNewTab2.visibility = View.GONE
         }
         Cookiedone.setOnClickListener {
-            tablerow.visibility = View.VISIBLE
+            tablerow.visibility = View.GONE
             tabBar.visibility = View.VISIBLE
             urlBar.visibility = View.VISIBLE
             geckoView.visibility = View.VISIBLE
@@ -244,7 +244,10 @@ class MainActivity : AppCompatActivity() {
         buttonBack.setOnClickListener {
             currentTab?.let { if (it.canGoBack) it.session.goBack() }
         }
-        buttonReload.setOnClickListener { currentTab?.session?.reload() }
+        buttonReload.setOnClickListener {
+            currentTab?.session?.reload()
+            tablerow.visibility = View.GONE
+        }
         buttonHome.setOnClickListener {
             currentTab?.session?.loadUri(standart_suchmaschine_url)
             tablerow.visibility = View.GONE
@@ -252,7 +255,10 @@ class MainActivity : AppCompatActivity() {
         buttonForward.setOnClickListener {
             currentTab?.let { if (it.canGoForward) it.session.goForward() }
         }
-        buttonSettings.setOnClickListener { startActivity(Intent(this, Settings::class.java)) }
+        buttonSettings.setOnClickListener {
+            startActivity(Intent(this, Settings::class.java))
+            tablerow.visibility = View.GONE
+        }
 
         val toggleTabRow = View.OnClickListener {
             tablerow.visibility =

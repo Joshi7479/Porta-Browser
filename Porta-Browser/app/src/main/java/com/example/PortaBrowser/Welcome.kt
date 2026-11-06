@@ -16,7 +16,14 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import android.content.ContentValues.TAG
+import android.hardware.input.InputManager
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.flow.first
+import android.app.Activity
+import androidx.core.view.WindowInsetsControllerCompat
 
 class Welcome : AppCompatActivity() {
 
@@ -42,6 +49,15 @@ class Welcome : AppCompatActivity() {
         }
 
         val toporbottomswitch = findViewById<SwitchCompat>(R.id.welcomeurltobottom)
+        val urltextedit = findViewById<EditText>(R.id.searchengine)
+        urltextedit.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                hideKeyboard()
+                saveSearchEngine(urltextedit.text.toString())
+                true
+            } else false
+        }
+
 
 
         val startporta = findViewById<Slider>(R.id.startporta)
@@ -86,4 +102,34 @@ class Welcome : AppCompatActivity() {
             }
         }
     }
+
+    private fun normalizeUrl(input: String): String {
+        var url = input.trim().trimEnd('/')
+        if (url.isNotEmpty() && !url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "https://$url"
+        }
+        return url
+    }
+
+    private fun saveSearchEngine(input: String) {
+        val url = normalizeUrl(input)
+        if (url.isEmpty()) {
+            Toast.makeText(this, "Please enter a URL", Toast.LENGTH_SHORT).show()
+            return
+        }
+        lifecycleScope.launch {
+            try {
+                dataStore.edit { it[MEIN_STRING_KEY] = url }
+                Toast.makeText(this@Welcome, "Search engine saved!", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(this@Welcome, "Something went wrong...", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun Activity.hideKeyboard() {
+        val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
+        windowInsetsController.hide(WindowInsetsCompat.Type.ime())
+    }
+
+
 }
