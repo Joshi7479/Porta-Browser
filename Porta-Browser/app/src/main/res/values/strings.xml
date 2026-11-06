@@ -28,6 +28,7 @@
     <string name="newline">\n</string>
     <string name="sevennewlines">\n\n\n\n\n\n\n</string>
     <string name="colorhint">Enter HEX-Code (e.g. #D0BCFF)</string>
+    <string name="clearall">Clear all</string>
     <string name="reset">Reset</string>
     <string name="welcometitle">Welcome to Porta-Browser!</string>
     <string name="tabbarhintonwelcomescreen">Here will be the Tab-bar. To close a Tab, click and hold it. To create a new one, use the Button below!</string>
