@@ -200,58 +200,62 @@
 
         </LinearLayout>
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:id="@+id/history"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical"
+            android:padding="8dp"
             android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/historytitle"/>
+                android:text="@string/historytitle"
+                android:textColor="@android:color/white" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/historyside"
                 android:orientation="horizontal">
 
                 <Button
-                    android:layout_width="match_parent"
+                    android:id="@+id/historyclear"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/historydone"
-                    android:text="@string/done"/>
+                    android:layout_weight="1"
+                    android:text="@string/clearall" />
 
                 <Button
-                    android:layout_width="match_parent"
+                    android:id="@+id/historydone"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/historyreset"
-                    android:text="@string/reset"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/historyempty"
-                    android:text="@string/nohistory"/>
-
+                    android:layout_weight="1"
+                    android:text="@string/done" />
             </LinearLayout>
 
-
+            <TextView
+                android:id="@+id/historyEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="@string/nohistory"
+                android:textColor="#AAAAAA"
+                android:visibility="gone" />
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">
+
                 <LinearLayout
+                    android:id="@+id/historylayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:id="@+id/historylayout"/>
-
+                    android:orientation="vertical" />
             </ScrollView>
-
         </LinearLayout>
 
         <ScrollView
