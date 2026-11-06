@@ -12,17 +12,28 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/newline"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:visibility="gone"
         android:textColor="@color/blue_A200"
         android:gravity="center"
         android:id="@+id/portaschriftzug"/>
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
         android:id="@+id/portalogo"
         android:src="@drawable/portalogoundschriftzug"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/newline"/>
 
     <TextView
         android:layout_width="wrap_content"
