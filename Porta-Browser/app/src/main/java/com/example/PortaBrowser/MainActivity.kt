@@ -84,7 +84,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var historyListContainer: LinearLayout
     private lateinit var historyEmpty: TextView
     private var historyJob: Job? = null
-
     private class BrowserTab(
         var url: String,
         var title: String = DEFAULT_TAB_TITLE
@@ -94,7 +93,6 @@ class MainActivity : AppCompatActivity() {
         var canGoBack = false
         var canGoForward = false
     }
-
     private val tabs = mutableListOf<BrowserTab>()
     private var currentIndex = -1
     private var ignoreSelection = false
@@ -104,7 +102,6 @@ class MainActivity : AppCompatActivity() {
     private fun getRuntime(): GeckoRuntime {
         return sRuntime ?: GeckoRuntime.getDefault(applicationContext).also { sRuntime = it }
     }
-
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,7 +124,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, Welcome::class.java))
             sharedPref.edit().putBoolean("isFirstRun", false).apply()
         }
-
         cookiebutton = findViewById(R.id.cookie)
         geckoView = findViewById(R.id.webView)
         urlBar = findViewById(R.id.urlBar)
@@ -138,9 +134,7 @@ class MainActivity : AppCompatActivity() {
         topurl = findViewById(R.id.urltop)
         bottomBar = findViewById(R.id.bottomBar1)
         bookmark = findViewById(R.id.bookmarks)
-
         getRuntime()
-
         urlBar.setOnClickListener { urlBar.setText("") }
         urlBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO) {
@@ -148,7 +142,6 @@ class MainActivity : AppCompatActivity() {
                 true
             } else false
         }
-
         urlBar2.setOnClickListener { urlBar2.setText("") }
         urlBar2.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO) {
@@ -303,14 +296,12 @@ class MainActivity : AppCompatActivity() {
             addTab(standart_suchmaschine_url)
         }
     }
-
     override fun onResume() {
         super.onResume()
         if (tabs.isNotEmpty()) {
             lifecycleScope.launch { applySettings() }
         }
     }
-
     private fun setHistoryMode(show: Boolean) {
         val browserVis = if (show) View.GONE else View.VISIBLE
         geckoView.visibility = browserVis
@@ -333,7 +324,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     private suspend fun applySettings() {
         try {
             val preferences = dataStore.data.first()
@@ -348,7 +338,6 @@ class MainActivity : AppCompatActivity() {
                 urlwhere = toporbottom
             }
             updateUrlBarPosition()
-
             val gespeicherteFarbe = preferences[USER_COLOR_KEY]
             val gespeichertetextfarbe = preferences[USER_TEXT_COLOR_THEME]
             val gespeicherteFarbe2 = preferences[USER_COLOR2_KEY]
@@ -371,13 +360,11 @@ class MainActivity : AppCompatActivity() {
             Log.e(TAG, "applySettings failed", e)
         }
     }
-
     private fun updateUrlBarPosition() {
         val top = urlwhere == "top"
         topurl.visibility = if (top) View.VISIBLE else View.GONE
         bottomBar.visibility = if (top) View.GONE else View.VISIBLE
     }
-
     private fun loadInput(input: String) {
         val text = input.trim()
         if (text == "67") {
@@ -397,9 +384,7 @@ class MainActivity : AppCompatActivity() {
         }
         currentTab?.session?.loadUri(url)
     }
-
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
-
     private fun loadBookmarks() {
         bookmarkList.clear()
         try {
@@ -412,16 +397,15 @@ class MainActivity : AppCompatActivity() {
             }
         } catch (e: Exception) {
             Log.e(TAG, "loading Bookmarks failed", e)
+            Toast.makeText(this, "Internal service: Loading Bookmarks failed", Toast.LENGTH_SHORT).show()
         }
     }
-
     private fun saveBookmarks() {
         val arr = JSONArray()
         bookmarkList.forEach { arr.put(JSONObject().put("title", it.title).put("url", it.url)) }
         getSharedPreferences("AppPrefs", Context.MODE_PRIVATE).edit()
             .putString(BOOKMARKS_KEY, arr.toString()).apply()
     }
-
     private fun setBookmarkMode(show: Boolean) {
         val browserVis = if (show) View.GONE else View.VISIBLE
         geckoView.visibility = browserVis
@@ -446,7 +430,6 @@ class MainActivity : AppCompatActivity() {
                 .hideSoftInputFromWindow(bookmarkTitle.windowToken, 0)
         }
     }
-
     private fun saveBookmarkFromInputs() {
         var url = bookmarkUrl.text.toString().trim()
         if (url.isEmpty()) {
@@ -464,7 +447,6 @@ class MainActivity : AppCompatActivity() {
         refreshBookmarkList()
         Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show()
     }
-
     private fun refreshBookmarkList() {
         bookmarkListContainer.removeAllViews()
         bookmarkEmpty.visibility = if (bookmarkList.isEmpty()) View.VISIBLE else View.GONE
@@ -497,7 +479,6 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
             }
-
             val deleteBtn = Button(this).apply {
                 text = "✕"
                 layoutParams = LinearLayout.LayoutParams(dp(60), dp(50))
@@ -507,7 +488,6 @@ class MainActivity : AppCompatActivity() {
                     refreshBookmarkList()
                 }
             }
-
             buttonColor?.let {
                 val tint = ColorStateList.valueOf(it)
                 openBtn.backgroundTintList = tint
@@ -519,7 +499,6 @@ class MainActivity : AppCompatActivity() {
             bookmarkListContainer.addView(row)
         }
     }
-
     private fun renderHistory(entries: List<HistoryEntry>) {
         historyListContainer.removeAllViews()
         historyEmpty.visibility = if (entries.isEmpty()) View.VISIBLE else View.GONE
@@ -576,12 +555,10 @@ class MainActivity : AppCompatActivity() {
             historyListContainer.addView(row)
         }
     }
-
     private fun setUrlBars(url: String) {
         urlBar.setText(url)
         urlBar2.setText(url)
     }
-
     private fun createSession(tab: BrowserTab): GeckoSession {
         val session = GeckoSession()
 
@@ -652,7 +629,6 @@ class MainActivity : AppCompatActivity() {
 
         return session
     }
-
     private fun setupTabBar() {
         tabBar.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -663,7 +639,6 @@ class MainActivity : AppCompatActivity() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
     }
-
     private fun showTab(index: Int) {
         val tab = tabs[index]
         geckoView.releaseSession()
@@ -671,13 +646,11 @@ class MainActivity : AppCompatActivity() {
         setUrlBars(tab.url)
         progressBar.visibility = View.GONE
     }
-
     private fun switchToTab(index: Int) {
         if (index == currentIndex || index !in tabs.indices) return
         currentIndex = index
         showTab(index)
     }
-
     private fun addTab(url: String) {
         val tab = BrowserTab(url)
         val session = createSession(tab)
@@ -702,7 +675,6 @@ class MainActivity : AppCompatActivity() {
         session.loadUri(url)
         setUrlBars(url)
     }
-
     private fun closeTab(index: Int) {
         if (tabs.size <= 1 || index !in tabs.indices) return
 

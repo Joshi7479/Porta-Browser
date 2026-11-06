@@ -31,6 +31,7 @@ val USER_URL_BAR = stringPreferencesKey("user_url_bar")
 val USER_TEXT_COLOR_THEME = stringPreferencesKey("user_text_color_theme")
 val USER_COLOR2_KEY = stringPreferencesKey("user_color2")
 val USER_COLOR3_KEY = stringPreferencesKey("user_color3")
+val SOMETHING_CHANGED = stringPreferencesKey("changed")
 
 class Settings : AppCompatActivity() {
 
@@ -71,7 +72,7 @@ class Settings : AppCompatActivity() {
             findViewById<Button>(R.id.ddg).setBackgroundColor(colorInt)
             findViewById<Button>(R.id.color).setBackgroundColor(colorInt)
             findViewById<Button>(R.id.color).setTextColor(TextColorInt)
-            findViewById<SwitchCompat>(R.id.urlwhere).setTextColor(TextColorInt)
+            findViewById<SwitchCompat>(R.id.urlwhere).setTextColor(colorInt2)
             findViewById<Button>(R.id.save).setTextColor(TextColorInt)
             findViewById<Button>(R.id.keyboard).setTextColor(TextColorInt)
             findViewById<Button>(R.id.reset).setTextColor(TextColorInt)
@@ -84,7 +85,6 @@ class Settings : AppCompatActivity() {
             findViewById<SwitchCompat>(R.id.urlwhere).trackTintList = ColorStateList.valueOf(colorInt)
             rerunsetup.setTextColor(TextColorInt)
             urlwhere.isChecked = prefs[USER_URL_BAR] == "down"
-
             urlwhere.setOnCheckedChangeListener { _, isChecked ->
                 saveUrlBarPosition(if (isChecked) "down" else "top")
             }
@@ -120,27 +120,22 @@ class Settings : AppCompatActivity() {
         findViewById<Button>(R.id.color).setOnClickListener {
             startActivity(android.content.Intent(this, ColorActivity::class.java))
         }
-
         val portalogo = findViewById<ImageView>(R.id.portalogo)
         val portaschriftzug = findViewById<TextView>(R.id.portaschriftzug)
-
         portalogo.setOnClickListener {
             portalogo.visibility = View.GONE
             portaschriftzug.visibility = View.VISIBLE
         }
-
         portaschriftzug.setOnClickListener {
             portaschriftzug.visibility = View.GONE
             portalogo.visibility = View.VISIBLE
         }
-
         findViewById<Button>(R.id.keyboard).setOnClickListener {
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
         }
         lifecycleScope.launch {
         }
     }
-
     private fun normalizeUrl(input: String): String {
         var url = input.trim().trimEnd('/')
         if (url.isNotEmpty() && !url.startsWith("http://") && !url.startsWith("https://")) {
@@ -148,7 +143,6 @@ class Settings : AppCompatActivity() {
         }
         return url
     }
-
     private fun saveSearchEngine(input: String) {
         val url = normalizeUrl(input)
         if (url.isEmpty()) {
@@ -161,11 +155,10 @@ class Settings : AppCompatActivity() {
                 Toast.makeText(this@Settings, "Search engine saved!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Log.e(TAG, "saveSearchEngine failed", e)
-                Toast.makeText(this@Settings, "Something went wrong...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Settings, "Internal service: saveSearchEngine failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
     private fun saveUrlBarPosition(toporbottom: String) {
         lifecycleScope.launch {
             try {
@@ -173,9 +166,8 @@ class Settings : AppCompatActivity() {
                 Toast.makeText(this@Settings, "Saved!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Log.e(TAG, "saveUrlBarPosition failed", e)
-                Toast.makeText(this@Settings, "Something went wrong...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Settings, "Internal service: saveUrlBarPosition failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
 }

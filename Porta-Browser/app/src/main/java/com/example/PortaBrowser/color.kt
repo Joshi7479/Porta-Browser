@@ -5,6 +5,7 @@ import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.edit
@@ -13,17 +14,15 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class ColorActivity : AppCompatActivity() {
-    private lateinit var colorPreview: View
     private var selectedColorHex: String = "#448AFF"
     private var selectedColorHex2: String = "#00F0F0"
     private var selectedColorHex3: String = "#F00000"
     private var selectedtextcolorhex: String = "#FFFFFF"
+    private var colorchanged: String = "False"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.color)
-
-        colorPreview = findViewById(R.id.colorPreview)
         val applyButton = findViewById<Button>(R.id.applyColorButton)
         val reset = findViewById<Button>(R.id.reset)
         val choosecolor = findViewById<Button>(R.id.choosecolor)
@@ -32,50 +31,62 @@ class ColorActivity : AppCompatActivity() {
         val choosecolor3 = findViewById<Button>(R.id.choosecolor3)
 
         choosecolor.setOnClickListener {
+            colorchanged = "True"
             com.github.dhaval2404.colorpicker.ColorPickerDialog
                 .Builder(this)
                 .setTitle("Primary")
                 .setColorListener { color, colorHex ->
                     selectedColorHex = colorHex
-                    colorPreview.setBackgroundColor(color)
                     choosecolor.setBackgroundColor(color)
                     choosetextcolor.setBackgroundColor(color)
+                    applyButton.setBackgroundColor(color)
                 }
 
                 .show()
         }
 
         choosecolor2.setOnClickListener {
+            colorchanged = "True"
             com.github.dhaval2404.colorpicker.ColorPickerDialog
                 .Builder(this)
                 .setTitle("Secondary")
                 .setColorListener { color, colorHex3 ->
                     selectedColorHex2 = colorHex3
                     choosecolor2.setBackgroundColor(color)
+                    reset.setBackgroundColor(color)
                 }
                 .show()
 
         }
 
         choosecolor3.setOnClickListener {
+            colorchanged = "True"
             com.github.dhaval2404.colorpicker.ColorPickerDialog
                 .Builder(this)
                 .setTitle("Accent")
                 .setColorListener { color, colorHex4 ->
                     selectedColorHex3 = colorHex4
                     choosecolor3.setBackgroundColor(color)
+                    findViewById<Button>(R.id.close).setBackgroundColor(color)
                 }
                 .show()
 
         }
 
         choosetextcolor.setOnClickListener {
+            colorchanged = "True"
             com.github.dhaval2404.colorpicker.ColorPickerDialog
                 .Builder(this)
                 .setTitle("Text")
                 .setColorListener { color, colorHex2 ->
                     selectedtextcolorhex = colorHex2
                     choosetextcolor.setTextColor(color)
+                    choosecolor.setTextColor(color)
+                    choosecolor2.setTextColor(color)
+                    choosecolor3.setTextColor(color)
+                    applyButton.setTextColor(color)
+                    reset.setTextColor(color)
+                    findViewById<Button>(R.id.close).setTextColor(color)
                 }
                 .show()
         }
@@ -101,9 +112,13 @@ class ColorActivity : AppCompatActivity() {
                 choosecolor3.setBackgroundColor(colorInt3)
                 reset.setBackgroundColor(colorInt2)
                 applyButton.setBackgroundColor(colorInt)
-                colorPreview.setBackgroundColor(colorInt)
+                findViewById<Button>(R.id.close).setTextColor(TextColorInt)
+                choosecolor.setTextColor(TextColorInt)
+                choosecolor2.setTextColor(TextColorInt)
+                choosecolor3.setTextColor(TextColorInt)
+                reset.setTextColor(TextColorInt)
+                applyButton.setTextColor(TextColorInt)
             } catch (e: Exception) {
-                colorPreview.setBackgroundColor(AndroidColor.BLUE)
             }
         }
 
@@ -112,6 +127,7 @@ class ColorActivity : AppCompatActivity() {
         }
 
         reset.setOnClickListener {
+            colorchanged = "True"
             val defaultHex = "#448AFF"
             val defaulttextHex = "#000000"
             val defaultHex2 = "#00F0F0"
@@ -126,7 +142,6 @@ class ColorActivity : AppCompatActivity() {
             val colorInt3 = AndroidColor.parseColor(defaultHex3)
             choosetextcolor.setTextColor(TextcolorInt)
             findViewById<Button>(R.id.close).setBackgroundColor(colorInt3)
-            colorPreview.setBackgroundColor(colorInt)
             applyButton.setBackgroundColor(colorInt2)
             reset.setBackgroundColor(colorInt)
             choosetextcolor.setBackgroundColor(colorInt)
@@ -135,25 +150,34 @@ class ColorActivity : AppCompatActivity() {
             choosecolor3.setBackgroundColor(colorInt3)
             saveColorToDataStore(defaultHex)
             saveTextColorToDataStore(defaulttextHex)
+            choosecolor.setTextColor(TextcolorInt)
+            choosecolor2.setTextColor(TextcolorInt)
+            choosecolor3.setTextColor(TextcolorInt)
+            applyButton.setTextColor(TextcolorInt)
+            reset.setTextColor(TextcolorInt)
+            findViewById<Button>(R.id.close).setTextColor(TextcolorInt)
         }
 
         findViewById<Button>(R.id.close).setOnClickListener {
             apply()
-            startActivity(Intent(this, Settings::class.java))
+            if (colorchanged == "True") {
+                startActivity(Intent(this, MainActivity::class.java))
+            } else {
+                finish()
+            }
         }
     }
 
     private fun apply() {
         try {
             val colorInt = AndroidColor.parseColor(selectedColorHex)
-            colorPreview.setBackgroundColor(colorInt)
             saveTextColorToDataStore(selectedtextcolorhex)
             saveColorToDataStore(selectedColorHex)
             saveColor2ToDataStore(selectedColorHex2)
             saveColor3ToDataStore(selectedColorHex3)
 
         } catch (e: IllegalArgumentException) {
-            Toast.makeText(this, "Sorry! But Something went wrong", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Internal service: apply failed", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -163,9 +187,8 @@ class ColorActivity : AppCompatActivity() {
                 dataStore.edit { preferences ->
                     preferences[USER_COLOR_KEY] = color
                 }
-                Toast.makeText(this@ColorActivity, "Color saved!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Toast.makeText(this@ColorActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ColorActivity, "Internal service: saveColorToDataStore failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -175,9 +198,8 @@ class ColorActivity : AppCompatActivity() {
                 dataStore.edit { preferences ->
                     preferences[USER_COLOR2_KEY] = color
                 }
-                Toast.makeText(this@ColorActivity, "Color saved!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Toast.makeText(this@ColorActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ColorActivity, "Internal service: saveColor2ToDataStore failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -187,9 +209,9 @@ class ColorActivity : AppCompatActivity() {
                 dataStore.edit { preferences ->
                     preferences[USER_COLOR3_KEY] = color
                 }
-                Toast.makeText(this@ColorActivity, "Color saved!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ColorActivity, "Saved", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Toast.makeText(this@ColorActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ColorActivity, "Internal service: saveColor3ToDataStore failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -201,7 +223,7 @@ class ColorActivity : AppCompatActivity() {
                 }
 
             } catch (e: Exception) {
-                Toast.makeText(this@ColorActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ColorActivity, "Internal service: saveTextColorToDataStore failed", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -13,6 +13,12 @@
         android:src="@drawable/portalogoundschriftzug" />
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sevennewlines"/>
+
+
+    <TextView
         android:id="@+id/preview"
         android:text="@string/textpreview"
         android:layout_height="wrap_content"
@@ -29,14 +35,6 @@
         android:textSize="18sp"
         android:textColor="@android:color/white" />
 
-    <View
-        android:id="@+id/colorPreview"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="24dp"
-        android:background="#CCCCCC" />
 
     <Button
         android:id="@+id/choosecolor"
@@ -89,6 +87,12 @@
         android:layout_marginTop="8dp"
         android:text="@string/reset" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:text="@string/colorsgetappliedlater"/>
 
     <Button
         android:id="@+id/close"

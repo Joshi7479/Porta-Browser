@@ -53,4 +53,5 @@
     <string name="cookiehint">Here you can reset the cookies!</string>
     <string name="welcomeurlhint">Should the URL-Bar be on the bottom?</string>
     <string name="comingsoon">Sorry, but this feature is coming soon!</string>
+    <string name="colorsgetappliedlater">\nSome colors may not get applied before a restart!</string>
 </resources>

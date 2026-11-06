@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.graphics.Color as AndroidColor
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,6 +24,7 @@ import android.widget.EditText
 import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.flow.first
 import android.app.Activity
+import android.graphics.Color
 import androidx.core.view.WindowInsetsControllerCompat
 
 class Welcome : AppCompatActivity() {
@@ -69,6 +71,14 @@ class Welcome : AppCompatActivity() {
                 if (slider.value < 1.0f) {
                     animatesliderback(slider)
                 } else {
+                    val defaultHex = "#448AFF"
+                    val defaulttextHex = "#FFFFFF"
+                    val defaultHex2 = "#00F0F0"
+                    val defaultHex3 = "#F00000"
+                    saveColorToDataStore(defaultHex)
+                    saveColor2ToDataStore(defaultHex2)
+                    saveColor3ToDataStore(defaultHex3)
+                    saveTextColorToDataStore(defaulttextHex)
                     if (toporbottomswitch.isChecked) {
                         saveUrlBarPosition("down")
                     } else {
@@ -80,6 +90,55 @@ class Welcome : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun saveColorToDataStore(color: String) {
+        lifecycleScope.launch {
+            try {
+                dataStore.edit { preferences ->
+                    preferences[USER_COLOR_KEY] = color
+                }
+                Toast.makeText(this@Welcome, "Saved!", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(this@Welcome, "Internal service: saveColorToDataStore failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun saveColor2ToDataStore(color: String) {
+        lifecycleScope.launch {
+            try {
+                dataStore.edit { preferences ->
+                    preferences[USER_COLOR2_KEY] = color
+                }
+                Toast.makeText(this@Welcome, "Saved", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(this@Welcome, "Internal service: saveColor2ToDataStore failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun saveColor3ToDataStore(color: String) {
+        lifecycleScope.launch {
+            try {
+                dataStore.edit { preferences ->
+                    preferences[USER_COLOR3_KEY] = color
+                }
+                Toast.makeText(this@Welcome, "Saved", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(this@Welcome, "Internal service: saveColor3ToDataStore failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun saveTextColorToDataStore(textcolor : String) {
+        lifecycleScope.launch {
+            try {
+                dataStore.edit { preferences ->
+                    preferences[USER_TEXT_COLOR_THEME] = textcolor
+                }
+
+            } catch (e: Exception) {
+                Toast.makeText(this@Welcome, "Internal service: saveTextColorToDataStore failed", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun animatesliderback(slider: Slider) {
