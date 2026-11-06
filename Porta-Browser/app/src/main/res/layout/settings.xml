@@ -9,17 +9,26 @@
     android:orientation="vertical">
 
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:visibility="gone"
+        android:gravity="center"
+        android:id="@+id/portaschriftzug"/>
     <ImageView
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:gravity="center"
-    android:src="@drawable/portalogoundschriftzug"/>
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:id="@+id/portalogo"
+        android:src="@drawable/portalogoundschriftzug"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="16dp"
+        android:id="@+id/settingstitle"
         android:text="@string/settingstitle"
         android:textColor="#F00000"
         android:textSize="18sp" />
@@ -119,7 +128,12 @@
         android:text="@string/done" />
 
     <TextView
-        android:id="@+id/bottomBar2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sevennewlines"/>
+
+    <TextView
+        android:id="@+id/madebyme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"

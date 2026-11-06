@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -57,37 +58,6 @@
     </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="4dp">
-
-        <Button
-            android:id="@+id/newtab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#F00000"
-            android:text="@string/plus"/>
-
-        <EditText
-            android:id="@+id/urlBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/urlbarhint"
-            android:maxLines="1"
-            android:imeOptions="actionGo"
-            android:inputType="textUri" />
-
-        <Button
-            android:id="@+id/hide"
-            android:layout_width="wrap_content"
-            android:backgroundTint="#F00000"
-            android:layout_height="wrap_content"
-            android:text="@string/burgermenu"/>
-    </LinearLayout>
 
 
     <ProgressBar
@@ -123,6 +93,49 @@
                 android:textColor="@color/blue_A200"
                 android:text="@string/welcomemessage" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="70dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/keyboardtoggle"
+                    android:text="@string/keyboard"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_weight="10"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/searchengine"
+                    android:hint="@string/comingsoon"
+                    android:textColorHint="#00F0F0"/>
+
+                <Button
+                    android:layout_width="70dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/savewelcome"
+                    android:text="@string/saveunicode"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue_A200"
+                    android:text="@string/welcomeurlhint"
+                    app:thumbTint="#F00000"
+                    app:trackTint="#00F0F0"
+                    android:id="@+id/welcomeurltobottom"/>
+            </LinearLayout>
 
             <Button
                 android:layout_width="match_parent"
@@ -150,16 +163,15 @@
                 android:text="@string/newline"/>
 
             <com.google.android.material.slider.Slider
-                android:layout_width="match_parent"
-                app:thumbColor="#00F0F0"
-                app:trackColor="#F00000"
-                android:layout_height="wrap_content"
                 android:id="@+id/startporta"
-                app:labelBehavior="gone"
-                android:valueFrom="0.0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:value="0.0"
-                android:valueTo="1.0"/>
-
+                android:valueFrom="0.0"
+                android:valueTo="1.0"
+                app:labelBehavior="gone"
+                app:thumbColor="#00F0F0"
+                app:trackColor="#F00000" />
 
 
         </LinearLayout>
