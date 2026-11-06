@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import org.mozilla.geckoview.GeckoRuntimeSettings
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
@@ -102,12 +103,18 @@ class MainActivity : AppCompatActivity() {
         get() = tabs.getOrNull(currentIndex)
 
     private fun getRuntime(): GeckoRuntime {
-        return sRuntime ?: GeckoRuntime.getDefault(applicationContext).also { sRuntime = it }
+        return sRuntime ?: GeckoRuntime.create(
+            applicationContext,
+            GeckoRuntimeSettings.Builder()
+                .aboutConfigEnabled(true)
+                .build()
+        ).also { sRuntime = it }
     }
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         val sharedPref = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val isFirstRun = sharedPref.getBoolean("isFirstRun", true)
@@ -300,6 +307,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             applySettings()
             addTab(standart_suchmaschine_url)
+
         }
     }
     override fun onResume() {
