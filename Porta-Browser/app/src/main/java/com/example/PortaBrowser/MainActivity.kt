@@ -25,7 +25,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -35,9 +38,6 @@ import org.mozilla.geckoview.GeckoRuntime
 import org.mozilla.geckoview.GeckoSession
 import org.mozilla.geckoview.GeckoView
 import org.mozilla.geckoview.StorageController
-import androidx.room.Room
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         private const val BOOKMARKS_KEY = "bookmarks"
         private var sRuntime: GeckoRuntime? = null
     }
+
     private var standart_suchmaschine_url = "https://searx.tiekoetter.com"
     private var urlwhere = "top"
     private lateinit var geckoView: GeckoView
@@ -67,9 +68,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var Cookieside: LinearLayout
     private lateinit var alleButtons: List<Button>
     private lateinit var andereButtons: List<Button>
+
     private data class Bookmark(val title: String, val url: String)
+
     private val bookmarkList = mutableListOf<Bookmark>()
-    private val historyList = mutableListOf<GeckoSession.HistoryDelegate.HistoryList>()
     private var buttonColor: Int? = null
     private var buttonColor2: Int? = null
     private var textcolor: Int? = null
@@ -82,6 +84,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var historyListContainer: LinearLayout
     private lateinit var historyEmpty: TextView
     private var historyJob: Job? = null
+
     private class BrowserTab(
         var url: String,
         var title: String = DEFAULT_TAB_TITLE
@@ -91,6 +94,7 @@ class MainActivity : AppCompatActivity() {
         var canGoBack = false
         var canGoForward = false
     }
+
     private val tabs = mutableListOf<BrowserTab>()
     private var currentIndex = -1
     private var ignoreSelection = false
@@ -166,13 +170,10 @@ class MainActivity : AppCompatActivity() {
         val bookmarkdone = findViewById<Button>(R.id.bookmarkdone)
         val bookmarkadd = findViewById<Button>(R.id.bookmarkadd)
         val Cookiedone = findViewById<Button>(R.id.cookiedone)
-        val historyclear = findViewById<Button>(R.id.historyreset)
         val buttonhistory = findViewById<Button>(R.id.historybutton)
-        val historydone = findViewById<Button>(R.id.historydone)
         val cookieclear = findViewById<Button>(R.id.resetcookies)
         val portalogo = findViewById<ImageView>(R.id.portalogo)
         val portaschriftzug = findViewById<TextView>(R.id.portaschriftzug)
-        val historybutton = findViewById<Button>(R.id.historybutton)
 
         portalogo.setOnClickListener {
             portalogo.visibility = View.GONE
@@ -185,11 +186,10 @@ class MainActivity : AppCompatActivity() {
 
         cookieclear.setOnClickListener {
             getRuntime().storageController.clearData(
-                StorageController.ClearFlags.COOKIES)
-        tablerow.visibility = View.GONE}
-
-        buttonhistory.setOnClickListener { setHistoryMode(true) }
-        historydone.setOnClickListener { setHistoryMode(false) }
+                StorageController.ClearFlags.COOKIES
+            )
+            tablerow.visibility = View.GONE
+        }
 
         Cookieside = findViewById(R.id.cookieside)
         bookmarkSide = findViewById(R.id.bookmarkside)
@@ -197,8 +197,18 @@ class MainActivity : AppCompatActivity() {
         bookmarkUrl = findViewById(R.id.bookmarkurl)
         bookmarkListContainer = findViewById(R.id.bookmarklist)
         bookmarkEmpty = findViewById(R.id.bookmarkempty)
-        historyEmpty = findViewById<TextView>(R.id.historyempty)
         loadBookmarks()
+        historySide = findViewById(R.id.history)
+        historyListContainer = findViewById(R.id.historylayout)
+        historyEmpty = findViewById(R.id.historyEmpty)
+        val historyDone = findViewById<Button>(R.id.historydone)
+        val historyClear = findViewById<Button>(R.id.historyclear)
+
+        buttonhistory.setOnClickListener { setHistoryMode(true) }
+        historyDone.setOnClickListener { setHistoryMode(false) }
+        historyClear.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) { db.historyDao().deleteAll() }
+        }
 
         bookmark.setOnClickListener { setBookmarkMode(true) }
         bookmarkdone.setOnClickListener { setBookmarkMode(false) }
@@ -231,6 +241,7 @@ class MainActivity : AppCompatActivity() {
             buttonBack, buttonReload, buttonHome, buttonForward,
             buttonSettings, buttongit, bookmarkdone, bookmarkadd,
             bookmark, buttonhistory, cookiebutton, Cookiedone, cookieclear,
+            historyDone, historyClear
         )
 
         andereButtons = listOf(
@@ -275,6 +286,7 @@ class MainActivity : AppCompatActivity() {
             override fun handleOnBackPressed() {
                 val tab = currentTab
                 when {
+                    historySide.visibility == View.VISIBLE -> setHistoryMode(false)
                     bookmarkSide.visibility == View.VISIBLE -> setBookmarkMode(false)
                     tab != null && tab.canGoBack -> tab.session.goBack()
                     tabs.size > 1 -> closeTab(currentIndex)
@@ -289,14 +301,6 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             applySettings()
             addTab(standart_suchmaschine_url)
-
-        }
-        historySide = findViewById(R.id.history)
-        historyListContainer = findViewById(R.id.historylayout)
-
-        historybutton.setOnClickListener { setHistoryMode(true) }
-        historyclear.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.IO) { db.historyDao().clear() }
         }
     }
 
@@ -317,10 +321,10 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.hide).visibility = browserVis
         findViewById<Button>(R.id.newtab).visibility = browserVis
         findViewById<Button>(R.id.newtab2).visibility = browserVis
-        findViewById<Button>(R.id.historyreset).visibility = browserVis
         historySide.visibility = if (show) View.VISIBLE else View.GONE
 
         historyJob?.cancel()
+        historyJob = null
         if (show) {
             historyJob = lifecycleScope.launch {
                 db.historyDao().observeAll().collect { entries ->
@@ -356,13 +360,12 @@ class MainActivity : AppCompatActivity() {
             if (!gespeichertetextfarbe.isNullOrEmpty()) {
                 val parsedColor2 = Color.parseColor(gespeichertetextfarbe)
                 textcolor = parsedColor2
-                alleButtons.forEach { it.setTextColor(ColorStateList.valueOf(parsedColor2))  }
+                alleButtons.forEach { it.setTextColor(ColorStateList.valueOf(parsedColor2)) }
             }
             if (!gespeicherteFarbe2.isNullOrEmpty()) {
                 val parsedColor3 = Color.parseColor(gespeicherteFarbe2)
                 buttonColor2 = parsedColor3
                 andereButtons.forEach { it.backgroundTintList = ColorStateList.valueOf(parsedColor3) }
-
             }
         } catch (e: Exception) {
             Log.e(TAG, "applySettings failed", e)
@@ -377,6 +380,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadInput(input: String) {
         val text = input.trim()
+        if (text == "67") {
+            Toast.makeText(this, "Really?", Toast.LENGTH_SHORT).show()
+        }
+        if (text == "Hello World!") {
+            Toast.makeText(this, "Hello World!", Toast.LENGTH_SHORT).show()
+        }
+        if (text == "Hello World") {
+            Toast.makeText(this, "Hello World!", Toast.LENGTH_SHORT).show()
+        }
         if (text.isEmpty()) return
         val url = when {
             text.startsWith("http://") || text.startsWith("https://") -> text
@@ -385,7 +397,9 @@ class MainActivity : AppCompatActivity() {
         }
         currentTab?.session?.loadUri(url)
     }
+
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
+
     private fun loadBookmarks() {
         bookmarkList.clear()
         try {
@@ -400,11 +414,14 @@ class MainActivity : AppCompatActivity() {
             Log.e(TAG, "loading Bookmarks failed", e)
         }
     }
+
     private fun saveBookmarks() {
         val arr = JSONArray()
         bookmarkList.forEach { arr.put(JSONObject().put("title", it.title).put("url", it.url)) }
-        getSharedPreferences("AppPrefs", Context.MODE_PRIVATE).edit().putString(BOOKMARKS_KEY, arr.toString()).apply()
+        getSharedPreferences("AppPrefs", Context.MODE_PRIVATE).edit()
+            .putString(BOOKMARKS_KEY, arr.toString()).apply()
     }
+
     private fun setBookmarkMode(show: Boolean) {
         val browserVis = if (show) View.GONE else View.VISIBLE
         geckoView.visibility = browserVis
@@ -429,6 +446,7 @@ class MainActivity : AppCompatActivity() {
                 .hideSoftInputFromWindow(bookmarkTitle.windowToken, 0)
         }
     }
+
     private fun saveBookmarkFromInputs() {
         var url = bookmarkUrl.text.toString().trim()
         if (url.isEmpty()) {
@@ -446,6 +464,7 @@ class MainActivity : AppCompatActivity() {
         refreshBookmarkList()
         Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show()
     }
+
     private fun refreshBookmarkList() {
         bookmarkListContainer.removeAllViews()
         bookmarkEmpty.visibility = if (bookmarkList.isEmpty()) View.VISIBLE else View.GONE
@@ -500,6 +519,7 @@ class MainActivity : AppCompatActivity() {
             bookmarkListContainer.addView(row)
         }
     }
+
     private fun renderHistory(entries: List<HistoryEntry>) {
         historyListContainer.removeAllViews()
         historyEmpty.visibility = if (entries.isEmpty()) View.VISIBLE else View.GONE

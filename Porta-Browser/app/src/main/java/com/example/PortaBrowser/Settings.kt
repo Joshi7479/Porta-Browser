@@ -98,6 +98,9 @@ class Settings : AppCompatActivity() {
                 true
             } else false
         }
+        searchEngineInput.setOnClickListener {
+            searchEngineInput.setText("")
+        }
         findViewById<Button>(R.id.save).setOnClickListener {
             saveSearchEngine(searchEngineInput.text.toString())
         }
