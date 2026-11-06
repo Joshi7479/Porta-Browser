@@ -1,5 +1,6 @@
 package com.example.PortaBrowser
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -23,6 +24,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import android.graphics.Color as AndroidColor
 import android.view.View
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 val Context.dataStore by preferencesDataStore(name = "settings")
 val MEIN_STRING_KEY = stringPreferencesKey("standart_suchmaschine")
@@ -95,6 +98,7 @@ class Settings : AppCompatActivity() {
         }
         searchEngineInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO) {
+                hideKeyboard()
                 saveSearchEngine(searchEngineInput.text.toString())
                 true
             } else false
@@ -150,6 +154,12 @@ class Settings : AppCompatActivity() {
             Toast.makeText(this, "Please enter a URL", Toast.LENGTH_SHORT).show()
             return
         }
+        if (url == "https://google.com") {
+            Toast.makeText(this, "Really? Google?", Toast.LENGTH_SHORT).show()
+        }
+        if (url == "https://google.de") {
+            Toast.makeText(this, "Really? Google?", Toast.LENGTH_SHORT).show()
+        }
         lifecycleScope.launch {
             try {
                 dataStore.edit { it[MEIN_STRING_KEY] = url }
@@ -170,5 +180,9 @@ class Settings : AppCompatActivity() {
                 Toast.makeText(this@Settings, "Internal service: saveUrlBarPosition failed", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+    private fun Activity.hideKeyboard() {
+        val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
+        windowInsetsController.hide(WindowInsetsCompat.Type.ime())
     }
 }

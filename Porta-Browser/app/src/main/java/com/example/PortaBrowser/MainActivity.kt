@@ -1,6 +1,7 @@
 package com.example.PortaBrowser
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -25,6 +26,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.google.android.material.tabs.TabLayout
@@ -108,8 +110,12 @@ class MainActivity : AppCompatActivity() {
             GeckoRuntimeSettings.Builder()
                 .aboutConfigEnabled(true)
                 .build()
-        ).also { sRuntime = it }
+        ).also { runtime ->
+            sRuntime = runtime
+            installUblock(runtime)
+        }
     }
+
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,9 +150,12 @@ class MainActivity : AppCompatActivity() {
         bottomBar = findViewById(R.id.bottomBar1)
         bookmark = findViewById(R.id.bookmarks)
         getRuntime()
-        urlBar.setOnClickListener { urlBar.setText("") }
+        urlBar.setOnClickListener {
+            urlBar.setText("")
+        }
         urlBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO) {
+                hideKeyboard()
                 loadInput(urlBar.text.toString())
                 true
             } else false
@@ -337,6 +346,22 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+    private fun installUblock(runtime: GeckoRuntime) {
+        runtime.webExtensionController
+            .ensureBuiltIn(
+                "resource://android/assets/extensions/ublock/",
+                "uBlock0@raymondhill.net"
+            )
+            .accept(
+                { ext ->
+                    Toast.makeText(this, "uBlock Origin was activated successfully!", Toast.LENGTH_SHORT).show()
+                },
+                { e ->
+                    Log.e("Browser", "installUblock failed", e)
+                    Toast.makeText(this, "Internal service: installUblock failed!", Toast.LENGTH_SHORT).show()
+                }
+            )
     }
     private suspend fun applySettings() {
         try {
@@ -721,5 +746,9 @@ class MainActivity : AppCompatActivity() {
         ignoreSelection = false
 
         if (closingCurrent) showTab(currentIndex)
+    }
+    private fun Activity.hideKeyboard() {
+        val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
+        windowInsetsController.hide(WindowInsetsCompat.Type.ime())
     }
 }

@@ -157,7 +157,7 @@ class Welcome : AppCompatActivity() {
                 Toast.makeText(this@Welcome, "Saved!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Log.e(TAG, "Internal Service: saveUrlBarPosition failed", e)
-                Toast.makeText(this@Welcome, "Something went wrong...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Welcome, "Internal Service: saveUrlBarPosition failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -181,7 +181,7 @@ class Welcome : AppCompatActivity() {
                 dataStore.edit { it[MEIN_STRING_KEY] = url }
                 Toast.makeText(this@Welcome, "Search engine saved!", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Toast.makeText(this@Welcome, "Something went wrong...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Welcome, "Internal Service: savesearchEngine failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
