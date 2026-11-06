@@ -31,14 +31,15 @@
     <string name="welcometitle">Willkommen beim Porta-Browser!</string>
     <string name="tabbarhintonwelcomescreen">Hier wird die Tableiste seien. Um einen Tab zu schließen, drückelange auf ihn. Um einen neuen zu öffnen, nutze den + Knopf!</string>
     <string name="welcomemessage">Der andere Knopf ist für die Seitenleiste. Dort findest du Optionen wie zurück, Einstellungen etc.\n\n\n\n\n\n\n\n\n</string>
-    <string name="startbutton">Auf geht´s!</string>
+    <string name="startbutton">Wische zum starten!</string>
     <string name="bookmarkempty">Keine Lesezeichen hinzugefügt</string>
     <string name="cookie">🍪</string>
     <string name="resetcookies">Cookies zurücksetzen</string>
     <string name="historysymbol">📜</string>
     <string name="historytitle">Suchverlauf</string>
     <string name="nohistory">Hier ist alles leer...</string>
-    <string name="startporta">Die Farbe wird erst später angewendet...\n\nStarte mit Porta</string>
+    <string name="startporta">Die Farbe wird erst später angewendet...\n\nDu kannst alles später in den einstellungen ändern.\n\nWische, um mit Porta zu startent!</string>
+    <string name="welcomesearchenginehint">Wenn du magst, kannst du hier erstmal die Standartsuchmaschiene ändern.\n(Leer lassen --> SearXNG)\n(z.B. example.com)</string>
     <string name="rerunsetup">Einführung wiederholen</string>
     <string name="logohidehint">Wenn du das Logo nicht immer sehen willst, kannst du einfach darauf tippen.</string>
     <string name="choosecolor">Primärfarbe wählen</string>
@@ -48,5 +49,7 @@
     <string name="textpreview">Vorschau</string>
     <string name="welcomecolor">Möchtest du erstmal dein Farben einstellen?</string>
     <string name="privatemode">Inkognito-Modus</string>
-    <string name="cookiehint">Hier kannst du die Cookies zurücksetzen. Mhmm... Lecker!</string>
+    <string name="cookiehint">🍪 Hier kannst du die Cookies zurücksetzen. Mhmm... Lecker!</string>
+    <string name="welcomeurlhint">Soll die URL-Bar nach unten gesetzt werden?</string>
+    <string name="comingsoon">Sorry, aber dieses Feature ist noch nicht verfügbar!</string>
 </resources>
