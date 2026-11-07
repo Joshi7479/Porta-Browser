@@ -60,6 +60,10 @@ class Welcome : AppCompatActivity() {
             } else false
         }
 
+        val ddg = findViewById<Button>(R.id.welcomeddg)
+        ddg.setOnClickListener {
+            saveSearchEngine("https://duckduckgo.com")
+        }
 
 
         val startporta = findViewById<Slider>(R.id.startporta)

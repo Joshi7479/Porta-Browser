@@ -122,6 +122,15 @@
                     android:textColorHint="#00F0F0"/>
 
             </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#00F0F0"
+                android:textColor="#F00000"
+                android:id="@+id/welcomeddg"
+                android:text="@string/setduckduckgo"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

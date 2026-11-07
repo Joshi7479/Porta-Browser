@@ -2,13 +2,18 @@ package com.example.PortaBrowser
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.text.format.Formatter
+import java.io.IOException
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import kotlinx.coroutines.ensureActive
 import android.graphics.Color
 import org.mozilla.geckoview.GeckoRuntimeSettings
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import kotlinx.coroutines.runBlocking
 import android.text.TextUtils
 import android.util.Log
@@ -16,6 +21,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.webkit.URLUtil
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -38,30 +44,58 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
+import androidx.appcompat.app.AlertDialog
+import kotlinx.coroutines.withContext
 import org.mozilla.geckoview.GeckoResult
 import org.mozilla.geckoview.GeckoRuntime
 import org.mozilla.geckoview.GeckoSession
 import org.mozilla.geckoview.GeckoView
-import org.mozilla.geckoview.Image
 import org.mozilla.geckoview.StorageController
+import org.mozilla.geckoview.WebResponse
+import android.Manifest
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.CancellationException
 
 class MainActivity : AppCompatActivity() {
-
     private val db by lazy {
         Room.databaseBuilder(applicationContext, AppDatabase::class.java, "browser.db")
             .build()
     }
-
     companion object {
         private const val TAG = "Browser"
         private const val DEFAULT_TAB_TITLE = "..."
         private const val BOOKMARKS_KEY = "bookmarks"
         private var sRuntime: GeckoRuntime? = null
+        private const val DOWNLOAD_CHANNEL = "downloads"
+        private const val ACTION_CANCEL_DOWNLOAD = "com.example.PortaBrowser.CANCEL_DOWNLOAD"
+        private const val EXTRA_DOWNLOAD_ID = "download_id"
     }
-
     private var standart_suchmaschine_url = "https://searx.tiekoetter.com"
     private var urlwhere = "top"
     private var isFullScreen = false
+    private val downloadJobs = java.util.concurrent.ConcurrentHashMap<Int, Job>()
+    private val nextDownloadId = java.util.concurrent.atomic.AtomicInteger(1000)
+
+    private val cancelReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val id = intent.getIntExtra(EXTRA_DOWNLOAD_ID, -1)
+            downloadJobs[id]?.cancel()
+        }
+    }
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
     private lateinit var geckoView: GeckoView
     private lateinit var urlBar: EditText
     private lateinit var urlBar2: EditText
@@ -134,7 +168,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         val sharedPref = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val isFirstRun = sharedPref.getBoolean("isFirstRun", true)
 
@@ -181,7 +214,6 @@ class MainActivity : AppCompatActivity() {
                 true
             } else false
         }
-
         val buttongit = findViewById<Button>(R.id.github)
         val buttonBack = findViewById<Button>(R.id.btnBack)
         val buttonReload = findViewById<Button>(R.id.btnReload)
@@ -208,7 +240,6 @@ class MainActivity : AppCompatActivity() {
             portaschriftzug.visibility = View.GONE
             portalogo.visibility = View.VISIBLE
         }
-
         cookieclear.setOnClickListener {
             getRuntime().storageController.clearData(
                 StorageController.ClearFlags.COOKIES
@@ -238,7 +269,6 @@ class MainActivity : AppCompatActivity() {
         bookmark.setOnClickListener { setBookmarkMode(true) }
         bookmarkdone.setOnClickListener { setBookmarkMode(false) }
         bookmarkadd.setOnClickListener { saveBookmarkFromInputs() }
-
         cookiebutton.setOnClickListener {
             tablerow.visibility = View.GONE
             tabBar.visibility = View.GONE
@@ -261,22 +291,18 @@ class MainActivity : AppCompatActivity() {
             buttonhide2.visibility = View.VISIBLE
             buttonNewTab2.visibility = View.VISIBLE
         }
-
         alleButtons = listOf(
             buttonBack, buttonReload, buttonHome, buttonForward,
             buttonSettings, buttongit, bookmarkdone, bookmarkadd,
             bookmark, buttonhistory, cookiebutton, Cookiedone, cookieclear,
             historyDone, historyClear
         )
-
         andereButtons = listOf(
             buttonhide, buttonhide2, buttonNewTab2, buttonNewTab,
         )
-
         urlbars = listOf(
             urlBar, urlBar2,
         )
-
         buttongit.setOnClickListener {
             loadInput("github.com/Joshi7479/Porta-Browser")
             tablerow.visibility = View.GONE
@@ -299,7 +325,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, Settings::class.java))
             tablerow.visibility = View.GONE
         }
-
         val toggleTabRow = View.OnClickListener {
             tablerow.visibility =
                 if (tablerow.visibility == View.VISIBLE) View.GONE else View.VISIBLE
@@ -308,9 +333,7 @@ class MainActivity : AppCompatActivity() {
         buttonhide2.setOnClickListener(toggleTabRow)
         buttonNewTab.setOnClickListener { addTab(standart_suchmaschine_url) }
         buttonNewTab2.setOnClickListener { addTab(standart_suchmaschine_url) }
-
         setupTabBar()
-
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val tab = currentTab
@@ -327,12 +350,27 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+        createDownloadChannel()
+        ContextCompat.registerReceiver(
+            this, cancelReceiver, IntentFilter(ACTION_CANCEL_DOWNLOAD),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
 
         lifecycleScope.launch {
             applySettings()
             addTab(standart_suchmaschine_url)
 
         }
+    }
+    override fun onDestroy() {
+        unregisterReceiver(cancelReceiver)
+        super.onDestroy()
     }
     override fun onResume() {
         super.onResume()
@@ -687,6 +725,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            override fun onExternalResponse(session: GeckoSession, response: WebResponse) {
+                handleDownload(response)
+            }
+
             override fun onFullScreen(session: GeckoSession, fullScreen: Boolean) {
                 if (tab === currentTab) setFullScreen(fullScreen)
             }
@@ -694,6 +736,149 @@ class MainActivity : AppCompatActivity() {
 
         return session
     }
+    private fun handleDownload(response: WebResponse) {
+        val contentDisposition = response.headers["content-disposition"]
+        val mimeType = response.headers["content-type"]
+            ?.substringBefore(';')?.trim()
+            ?: "application/octet-stream"
+        val fileName = sanitizeFileName(
+            URLUtil.guessFileName(response.uri, contentDisposition, mimeType)
+        )
+        val size = response.headers["content-length"]?.toLongOrNull()
+        val sizeText = size?.let { Formatter.formatShortFileSize(this, it) } ?: getString(R.string.unknownsize)
+
+        if (isFinishing || isDestroyed) {
+            response.body?.close()
+            return
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.download))
+            .setMessage("$fileName\n($sizeText)")
+            .setPositiveButton(getString(R.string.downloadpos)) { _, _ ->
+                startDownload(response, fileName, mimeType, size)
+            }
+            .setNegativeButton(getString(R.string.downloadn)) { _, _ -> response.body?.close() }
+            .setOnCancelListener { response.body?.close() }
+            .show()
+    }
+
+    private fun startDownload(response: WebResponse, fileName: String, mimeType: String, totalSize: Long?) {
+        val body = response.body
+        if (body == null) {
+            Log.e(TAG, "Download: response.body is null")
+            Toast.makeText(this, getString(R.string.downloadf), Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val id = nextDownloadId.getAndIncrement()
+        notifySafe(id, progressNotification(id, fileName, "…", null))
+
+        val job = lifecycleScope.launch(Dispatchers.IO, start = CoroutineStart.LAZY) {
+            val resolver = contentResolver
+            val values = ContentValues().apply {
+                put(MediaStore.Downloads.DISPLAY_NAME, fileName)
+                put(MediaStore.Downloads.MIME_TYPE, mimeType)
+                put(MediaStore.Downloads.IS_PENDING, 1)
+            }
+            val nm = NotificationManagerCompat.from(this@MainActivity)
+
+            val uri = try {
+                resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+            } catch (e: Throwable) {
+                Log.e(TAG, "Download: MediaStore insert failed", e)
+                null
+            }
+            if (uri == null) {
+                body.close()
+                downloadJobs.remove(id)
+                nm.cancel(id)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@MainActivity, getString(R.string.downloadf), Toast.LENGTH_LONG).show()
+                }
+                return@launch
+            }
+
+            try {
+                var downloaded = 0L
+                var lastUpdate = 0L
+
+                resolver.openOutputStream(uri)?.use { out ->
+                    body.use { input ->
+                        val buffer = ByteArray(64 * 1024)
+                        while (true) {
+                            ensureActive()
+                            val n = input.read(buffer)
+                            if (n < 0) break
+                            out.write(buffer, 0, n)
+                            downloaded += n
+
+                            val now = System.currentTimeMillis()
+                            if (now - lastUpdate >= 700) {
+                                lastUpdate = now
+                                val current = Formatter.formatShortFileSize(this@MainActivity, downloaded)
+                                if (totalSize != null && totalSize > 0) {
+                                    val percent = (downloaded * 100 / totalSize).toInt().coerceIn(0, 100)
+                                    val total = Formatter.formatShortFileSize(this@MainActivity, totalSize)
+                                    notifySafe(id, progressNotification(id, fileName, "$percent % ($current / $total)", percent))
+                                } else {
+                                    notifySafe(id, progressNotification(id, fileName, current, null))
+                                }
+                            }
+                        }
+                    }
+                } ?: throw IOException("No Output-Stream")
+
+                values.clear()
+                values.put(MediaStore.Downloads.IS_PENDING, 0)
+                resolver.update(uri, values, null, null)
+                Log.d(TAG, "Download done: $downloaded Bytes")
+
+                val openIntent = Intent(Intent.ACTION_VIEW)
+                    .setDataAndType(uri, mimeType)
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                val openPending = PendingIntent.getActivity(
+                    this@MainActivity, id, openIntent, PendingIntent.FLAG_IMMUTABLE
+                )
+                notifySafe(
+                    id,
+                    NotificationCompat.Builder(this@MainActivity, DOWNLOAD_CHANNEL)
+                        .setSmallIcon(android.R.drawable.stat_sys_download_done)
+                        .setContentTitle(fileName)
+                        .setContentText(getString(R.string.download_done))
+                        .setContentIntent(openPending)
+                        .setAutoCancel(true)
+                        .build()
+                )
+            } catch (e: CancellationException) {
+                Log.w(TAG, "Download failed", e)
+                resolver.delete(uri, null, null)
+                nm.cancel(id)
+                throw e
+            } catch (e: Throwable) {
+                Log.e(TAG, "Download failed", e)
+                resolver.delete(uri, null, null)
+                notifySafe(
+                    id,
+                    NotificationCompat.Builder(this@MainActivity, DOWNLOAD_CHANNEL)
+                        .setSmallIcon(android.R.drawable.stat_sys_warning)
+                        .setContentTitle(getString(R.string.download_failed_title))
+                        .setContentText(fileName)
+                        .setAutoCancel(true)
+                        .build()
+                )
+            } finally {
+                downloadJobs.remove(id)
+            }
+        }
+        downloadJobs[id] = job
+        job.start()
+    }
+
+    private fun sanitizeFileName(name: String): String =
+        name.substringAfterLast('/').substringAfterLast('\\')
+            .replace("..", "_")
+            .ifBlank { "download" }
     private fun setFullScreen(enable: Boolean) {
         isFullScreen = enable
         val controller = WindowInsetsControllerCompat(window, window.decorView)
@@ -815,5 +1000,43 @@ class MainActivity : AppCompatActivity() {
     private fun Activity.hideKeyboard() {
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsController.hide(WindowInsetsCompat.Type.ime())
+    }
+    private fun createDownloadChannel() {
+        if (Build.VERSION.SDK_INT >= 26) {
+            val channel = NotificationChannel(
+                DOWNLOAD_CHANNEL,
+                getString(R.string.download_channel_name),
+                NotificationManager.IMPORTANCE_LOW   // kein Ton
+            )
+            getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
+        }
+    }
+
+    private fun notifySafe(id: Int, notification: Notification) {
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+        ) return
+        NotificationManagerCompat.from(this).notify(id, notification)
+    }
+
+    private fun progressNotification(
+        id: Int, fileName: String, text: String, percent: Int?
+    ): Notification {
+        val cancelIntent = Intent(ACTION_CANCEL_DOWNLOAD)
+            .setPackage(packageName)
+            .putExtra(EXTRA_DOWNLOAD_ID, id)
+        val cancelPending = PendingIntent.getBroadcast(
+            this, id, cancelIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        return NotificationCompat.Builder(this, DOWNLOAD_CHANNEL)
+            .setSmallIcon(android.R.drawable.stat_sys_download)
+            .setContentTitle(fileName)
+            .setContentText(text)
+            .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .setProgress(100, percent ?: 0, percent == null)   // null = unbestimmt
+            .addAction(0, getString(R.string.download_cancel), cancelPending)
+            .build()
     }
 }

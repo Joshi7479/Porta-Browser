@@ -30,7 +30,7 @@
         app:tabIndicatorColor="#00F0F0"
         app:tabMode="scrollable"
         app:tabSelectedTextColor="@android:color/white"
-        app:tabTextColor="#AAAAAA" />
+        app:tabTextColor="#AAAAAA" />3
 
     <LinearLayout
         android:id="@+id/urltop"

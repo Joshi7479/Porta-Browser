@@ -65,4 +65,13 @@
     <string name="failed"> failed!</string>
     <string name="ublockof">Adblocker (UBlock Origin) is deactivated!</string>
     <string name="ublockon">Adblocker (UBlock Origin) was activated successfully!</string>
+    <string name="download">Download File?</string>
+    <string name="downloadpos">Start download</string>
+    <string name="downloadn">Cancel</string>
+    <string name="downloadf">Download failed!</string>
+    <string name="unknownsize">Error: Unknown size</string>
+    <string name="download_channel_name">Downloads</string>
+    <string name="download_cancel">Cancel</string>
+    <string name="download_done">Download finished</string>
+    <string name="download_failed_title">Download failed</string>
 </resources>
