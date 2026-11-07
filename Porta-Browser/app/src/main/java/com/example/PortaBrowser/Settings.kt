@@ -76,7 +76,7 @@ class Settings : AppCompatActivity() {
             findViewById<Button>(R.id.ddg).setBackgroundColor(colorInt)
             findViewById<Button>(R.id.color).setBackgroundColor(colorInt)
             findViewById<Button>(R.id.color).setTextColor(TextColorInt)
-            useublock.setTextColor(TextColorInt)
+            useublock.setTextColor(colorInt3)
             useublock.thumbTintList = ColorStateList.valueOf(colorInt3)
             useublock.trackTintList = ColorStateList.valueOf(colorInt)
             findViewById<SwitchCompat>(R.id.urlwhere).setTextColor(colorInt2)

@@ -26,6 +26,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
@@ -41,6 +42,7 @@ import org.mozilla.geckoview.GeckoResult
 import org.mozilla.geckoview.GeckoRuntime
 import org.mozilla.geckoview.GeckoSession
 import org.mozilla.geckoview.GeckoView
+import org.mozilla.geckoview.Image
 import org.mozilla.geckoview.StorageController
 
 class MainActivity : AppCompatActivity() {
@@ -59,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     private var standart_suchmaschine_url = "https://searx.tiekoetter.com"
     private var urlwhere = "top"
+    private var isFullScreen = false
     private lateinit var geckoView: GeckoView
     private lateinit var urlBar: EditText
     private lateinit var urlBar2: EditText
@@ -90,6 +93,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var historyListContainer: LinearLayout
     private lateinit var historyEmpty: TextView
     private var historyJob: Job? = null
+    private var schriftoderlogo: String = "logo"
     private class BrowserTab(
         var url: String,
         var title: String = DEFAULT_TAB_TITLE
@@ -311,6 +315,7 @@ class MainActivity : AppCompatActivity() {
             override fun handleOnBackPressed() {
                 val tab = currentTab
                 when {
+                    isFullScreen -> currentTab?.session?.exitFullScreen()
                     historySide.visibility == View.VISIBLE -> setHistoryMode(false)
                     bookmarkSide.visibility == View.VISIBLE -> setBookmarkMode(false)
                     tab != null && tab.canGoBack -> tab.session.goBack()
@@ -681,9 +686,56 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            override fun onFullScreen(session: GeckoSession, fullScreen: Boolean) {
+                if (tab === currentTab) setFullScreen(fullScreen)
+            }
         }
 
         return session
+    }
+    private fun setFullScreen(enable: Boolean) {
+        isFullScreen = enable
+        val controller = WindowInsetsControllerCompat(window, window.decorView)
+
+        if (enable) {
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            topurl.visibility = View.GONE
+            bottomBar.visibility = View.GONE
+            tabBar.visibility = View.GONE
+            tablerow.visibility = View.GONE
+            progressBar.visibility = View.GONE
+            findViewById<Button>(R.id.hide).visibility = View.GONE
+            findViewById<Button>(R.id.hide2).visibility = View.GONE
+            findViewById<Button>(R.id.newtab).visibility = View.GONE
+            findViewById<Button>(R.id.newtab2).visibility = View.GONE
+
+            if (findViewById<ImageView>(R.id.portalogo).visibility == View.VISIBLE) {
+                schriftoderlogo = "logo"
+            } else {
+                schriftoderlogo = "schrift"
+            }
+            findViewById<TextView>(R.id.portaschriftzug).visibility = View.GONE
+            findViewById<ImageView>(R.id.portalogo).visibility = View.GONE
+        } else {
+            controller.show(WindowInsetsCompat.Type.systemBars())
+            tabBar.visibility = View.VISIBLE
+            findViewById<View>(R.id.hide).visibility = View.VISIBLE
+            findViewById<View>(R.id.newtab).visibility = View.VISIBLE
+            findViewById<View>(R.id.newtab2).visibility = View.VISIBLE
+            updateUrlBarPosition()
+            if (schriftoderlogo == "schrift") {
+                findViewById<TextView>(R.id.portaschriftzug).visibility = View.VISIBLE
+                findViewById<ImageView>(R.id.portalogo).visibility = View.GONE
+            } else {
+                findViewById<TextView>(R.id.portaschriftzug).visibility = View.GONE
+                findViewById<ImageView>(R.id.portalogo).visibility = View.VISIBLE
+            }
+
+        }
     }
     private fun setupTabBar() {
         tabBar.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -696,6 +748,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
     private fun showTab(index: Int) {
+        if (isFullScreen) {
+            setFullScreen(false)
+        }
         val tab = tabs[index]
         geckoView.releaseSession()
         geckoView.setSession(tab.session)
