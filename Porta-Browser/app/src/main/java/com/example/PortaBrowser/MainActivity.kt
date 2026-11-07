@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
             if (ublockonorof == "on") {
                 installUblock(runtime)
             } else {
-                Toast.makeText(this, "Ublock is deactivated!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.ublockof), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -146,6 +146,7 @@ class MainActivity : AppCompatActivity() {
 
         if (isFirstRun) {
             startActivity(Intent(this, Welcome::class.java))
+            Toast.makeText(this, getString(R.string.welcometitle), Toast.LENGTH_SHORT).show()
             sharedPref.edit().putBoolean("isFirstRun", false).apply()
         }
         cookiebutton = findViewById(R.id.cookie)
@@ -364,11 +365,11 @@ class MainActivity : AppCompatActivity() {
             )
             .accept(
                 { ext ->
-                    Toast.makeText(this, "uBlock Origin was activated successfully!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.ublockon), Toast.LENGTH_SHORT).show()
                 },
                 { e ->
                     Log.e("Browser", "installUblock failed", e)
-                    Toast.makeText(this, "Internal service: installUblock failed!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.internalservice) + "installUBlock" + getString(R.string.failed), Toast.LENGTH_SHORT).show()
                 }
             )
     }
@@ -452,7 +453,7 @@ class MainActivity : AppCompatActivity() {
             }
         } catch (e: Exception) {
             Log.e(TAG, "loading Bookmarks failed", e)
-            Toast.makeText(this, "Internal service: Loading Bookmarks failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.internalservice) + "loadBookmarks" + getString(R.string.failed), Toast.LENGTH_SHORT).show()
         }
     }
     private fun saveBookmarks() {
@@ -488,7 +489,7 @@ class MainActivity : AppCompatActivity() {
     private fun saveBookmarkFromInputs() {
         var url = bookmarkUrl.text.toString().trim()
         if (url.isEmpty()) {
-            Toast.makeText(this, "Please enter an URL", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.nourl), Toast.LENGTH_SHORT).show()
             return
         }
         if (!url.startsWith("http://") && !url.startsWith("https://")) url = "https://$url"
@@ -500,7 +501,7 @@ class MainActivity : AppCompatActivity() {
 
         saveBookmarks()
         refreshBookmarkList()
-        Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.saved), Toast.LENGTH_SHORT).show()
     }
     private fun refreshBookmarkList() {
         bookmarkListContainer.removeAllViews()

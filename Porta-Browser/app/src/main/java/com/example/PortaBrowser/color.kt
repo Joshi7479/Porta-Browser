@@ -177,7 +177,7 @@ class ColorActivity : AppCompatActivity() {
             saveColor3ToDataStore(selectedColorHex3)
 
         } catch (e: IllegalArgumentException) {
-            Toast.makeText(this, "Internal service: apply failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.internalservice) + "apply" + getString(R.string.failed), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -188,7 +188,7 @@ class ColorActivity : AppCompatActivity() {
                     preferences[USER_COLOR_KEY] = color
                 }
             } catch (e: Exception) {
-                Toast.makeText(this@ColorActivity, "Internal service: saveColorToDataStore failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ColorActivity, getString(R.string.internalservice) + "saveColorToDataStore" + getString(R.string.failed), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -199,7 +199,7 @@ class ColorActivity : AppCompatActivity() {
                     preferences[USER_COLOR2_KEY] = color
                 }
             } catch (e: Exception) {
-                Toast.makeText(this@ColorActivity, "Internal service: saveColor2ToDataStore failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ColorActivity, getString(R.string.internalservice) + "saveColor2ToDataStore" + getString(R.string.failed), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -209,9 +209,9 @@ class ColorActivity : AppCompatActivity() {
                 dataStore.edit { preferences ->
                     preferences[USER_COLOR3_KEY] = color
                 }
-                Toast.makeText(this@ColorActivity, "Saved", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ColorActivity, getString(R.string.saved), Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Toast.makeText(this@ColorActivity, "Internal service: saveColor3ToDataStore failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ColorActivity, getString(R.string.internalservice) + "saveColor3ToDataStore" + getString(R.string.failed), Toast.LENGTH_SHORT).show()
             }
         }
     }

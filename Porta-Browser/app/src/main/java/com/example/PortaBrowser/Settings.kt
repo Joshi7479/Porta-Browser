@@ -158,22 +158,22 @@ class Settings : AppCompatActivity() {
     private fun saveSearchEngine(input: String) {
         val url = normalizeUrl(input)
         if (url.isEmpty()) {
-            Toast.makeText(this, "Please enter a URL", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.nourl), Toast.LENGTH_SHORT).show()
             return
         }
         if (url == "https://google.com") {
-            Toast.makeText(this, "Really? Google?", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.reallygoogle), Toast.LENGTH_SHORT).show()
         }
         if (url == "https://google.de") {
-            Toast.makeText(this, "Really? Google?", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.reallygoogle), Toast.LENGTH_SHORT).show()
         }
         lifecycleScope.launch {
             try {
                 dataStore.edit { it[MEIN_STRING_KEY] = url }
-                Toast.makeText(this@Settings, "Search engine saved!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Settings, getString(R.string.saved), Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Log.e(TAG, "saveSearchEngine failed", e)
-                Toast.makeText(this@Settings, "Internal service: saveSearchEngine failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Settings, getString(R.string.internalservice) + "saveSearchEngine" + getString(R.string.failed), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -181,10 +181,10 @@ class Settings : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 dataStore.edit { it[USER_URL_BAR] = toporbottom }
-                Toast.makeText(this@Settings, "Saved!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Settings, getString(R.string.saved), Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Log.e(TAG, "saveUrlBarPosition failed", e)
-                Toast.makeText(this@Settings, "Internal service: saveUrlBarPosition failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Settings, getString(R.string.internalservice) + "saveUrlBarPosition" + getString(R.string.failed), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -192,10 +192,10 @@ class Settings : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 dataStore.edit { it[USER_UBLOCK_KEY] = onorof }
-                Toast.makeText(this@Settings, "Saved!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Settings, getString(R.string.saved), Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Log.e(TAG, "useublock failed", e)
-                Toast.makeText(this@Settings, "Internal service: useUBlock failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Settings, getString(R.string.internalservice) + "useublock" + getString(R.string.failed), Toast.LENGTH_SHORT).show()
             }
         }
     }

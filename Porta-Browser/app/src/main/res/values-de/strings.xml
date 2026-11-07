@@ -56,4 +56,12 @@
     <string name="welcomeurlhint">Soll die URL-Bar nach unten gesetzt werden?</string>
     <string name="comingsoon">Sorry, aber dieses Feature ist noch nicht verfügbar!</string>
     <string name="colorsgetappliedlater">\nManche Farben werden erst nach einem Neustart angewendet!</string>
+    <string name="saved">Gespeichert!</string>
+    <string name="really">Wirklich?</string>
+    <string name="reallygoogle">Warum? Warum? Warum?</string>
+    <string name="nourl">Bitte eine Url eingeben</string>
+    <string name="internalservice">Interner Service: </string>
+    <string name="failed"> ist abgestürzt!</string>
+    <string name="ublockof">Werbeblocker (UBlock Origin) ist aus!</string>
+    <string name="ublockon">Werbeblocker (UBlock Origin) wurde erfolgreich aktiviert!</string>
 </resources>

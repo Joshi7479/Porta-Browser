@@ -56,4 +56,12 @@
     <string name="welcomeurlhint">Should the URL-Bar be on the bottom?</string>
     <string name="comingsoon">Sorry, but this feature is coming soon!</string>
     <string name="colorsgetappliedlater">\nSome colors may not get applied before a restart!</string>
+    <string name="saved">Saved</string>
+    <string name="really">Really?</string>
+    <string name="reallygoogle">Really? Google?</string>
+    <string name="nourl">Please enter a Url</string>
+    <string name="internalservice">Internal service: </string>
+    <string name="failed"> failed!</string>
+    <string name="ublockof">Adblocker (UBlock Origin) is deactivated!</string>
+    <string name="ublockon">Adblocker (UBlock Origin) was activated successfully!</string>
 </resources>
