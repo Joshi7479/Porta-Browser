@@ -3,9 +3,7 @@ package com.example.PortaBrowser
 import android.content.Intent
 import android.graphics.Color as AndroidColor
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.edit
@@ -103,29 +101,27 @@ class ColorActivity : AppCompatActivity() {
                 val colorInt = AndroidColor.parseColor(selectedColorHex)
                 val colorInt2 = AndroidColor.parseColor(selectedColorHex2)
                 val colorInt3 = AndroidColor.parseColor(selectedColorHex3)
-                val TextColorInt = AndroidColor.parseColor(selectedtextcolorhex)
+                val textColorInt = AndroidColor.parseColor(selectedtextcolorhex)
                 findViewById<Button>(R.id.close).setBackgroundColor(colorInt3)
                 choosecolor.setBackgroundColor(colorInt)
                 choosetextcolor.setBackgroundColor(colorInt)
-                choosetextcolor.setTextColor(TextColorInt)
+                choosetextcolor.setTextColor(textColorInt)
                 choosecolor2.setBackgroundColor(colorInt2)
                 choosecolor3.setBackgroundColor(colorInt3)
                 reset.setBackgroundColor(colorInt)
                 applyButton.setBackgroundColor(colorInt2)
-                findViewById<Button>(R.id.close).setTextColor(TextColorInt)
-                choosecolor.setTextColor(TextColorInt)
-                choosecolor2.setTextColor(TextColorInt)
-                choosecolor3.setTextColor(TextColorInt)
-                reset.setTextColor(TextColorInt)
-                applyButton.setTextColor(TextColorInt)
+                findViewById<Button>(R.id.close).setTextColor(textColorInt)
+                choosecolor.setTextColor(textColorInt)
+                choosecolor2.setTextColor(textColorInt)
+                choosecolor3.setTextColor(textColorInt)
+                reset.setTextColor(textColorInt)
+                applyButton.setTextColor(textColorInt)
             } catch (e: Exception) {
             }
         }
-
         applyButton.setOnClickListener {
             apply()
         }
-
         reset.setOnClickListener {
             colorchanged = "True"
             val defaultHex = "#448AFF"
@@ -136,11 +132,11 @@ class ColorActivity : AppCompatActivity() {
             selectedColorHex2 = defaultHex2
             selectedColorHex3 = defaultHex3
             selectedtextcolorhex = defaulttextHex
-            val TextcolorInt = AndroidColor.parseColor(defaulttextHex)
+            val textcolorInt = AndroidColor.parseColor(defaulttextHex)
             val colorInt = AndroidColor.parseColor(defaultHex)
             val colorInt2 = AndroidColor.parseColor(defaultHex2)
             val colorInt3 = AndroidColor.parseColor(defaultHex3)
-            choosetextcolor.setTextColor(TextcolorInt)
+            choosetextcolor.setTextColor(textcolorInt)
             findViewById<Button>(R.id.close).setBackgroundColor(colorInt3)
             applyButton.setBackgroundColor(colorInt2)
             reset.setBackgroundColor(colorInt)
@@ -150,14 +146,13 @@ class ColorActivity : AppCompatActivity() {
             choosecolor3.setBackgroundColor(colorInt3)
             saveColorToDataStore(defaultHex)
             saveTextColorToDataStore(defaulttextHex)
-            choosecolor.setTextColor(TextcolorInt)
-            choosecolor2.setTextColor(TextcolorInt)
-            choosecolor3.setTextColor(TextcolorInt)
-            applyButton.setTextColor(TextcolorInt)
-            reset.setTextColor(TextcolorInt)
-            findViewById<Button>(R.id.close).setTextColor(TextcolorInt)
+            choosecolor.setTextColor(textcolorInt)
+            choosecolor2.setTextColor(textcolorInt)
+            choosecolor3.setTextColor(textcolorInt)
+            applyButton.setTextColor(textcolorInt)
+            reset.setTextColor(textcolorInt)
+            findViewById<Button>(R.id.close).setTextColor(textcolorInt)
         }
-
         findViewById<Button>(R.id.close).setOnClickListener {
             apply()
             if (colorchanged == "True") {
@@ -167,10 +162,8 @@ class ColorActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun apply() {
         try {
-            val colorInt = AndroidColor.parseColor(selectedColorHex)
             saveTextColorToDataStore(selectedtextcolorhex)
             saveColorToDataStore(selectedColorHex)
             saveColor2ToDataStore(selectedColorHex2)
@@ -180,7 +173,6 @@ class ColorActivity : AppCompatActivity() {
             Toast.makeText(this, getString(R.string.internalservice) + "apply" + getString(R.string.failed), Toast.LENGTH_SHORT).show()
         }
     }
-
     private fun saveColorToDataStore(color: String) {
         lifecycleScope.launch {
             try {
@@ -223,7 +215,7 @@ class ColorActivity : AppCompatActivity() {
                 }
 
             } catch (e: Exception) {
-                Toast.makeText(this@ColorActivity, "Internal service: saveTextColorToDataStore failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ColorActivity, getString(R.string.internalservice) + "saveTextColortoDataStore" + getString(R.string.failed), Toast.LENGTH_SHORT).show()
             }
         }
     }

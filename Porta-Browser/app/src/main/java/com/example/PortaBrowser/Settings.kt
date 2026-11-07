@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
@@ -37,17 +36,14 @@ val USER_COLOR3_KEY = stringPreferencesKey("user_color3")
 val USER_UBLOCK_KEY = stringPreferencesKey("ublock")
 
 class Settings : AppCompatActivity() {
-
     companion object {
         private const val TAG = "Settings"
         private const val SEARX = "https://searx.tiekoetter.com"
         private const val DDG = "https://duckduckgo.com"
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings)
-
         val searchEngineInput = findViewById<EditText>(R.id.test)
         val urlwhere = findViewById<SwitchCompat>(R.id.urlwhere)
         val useublock = findViewById<SwitchCompat>(R.id.useublock)
@@ -66,7 +62,7 @@ class Settings : AppCompatActivity() {
             val accentcolor = prefs[USER_COLOR3_KEY] ?: "#F00000"
             val colorInt = AndroidColor.parseColor(selectedColorHex)
             val colorInt2 = AndroidColor.parseColor(selectedColorHex2)
-            val TextColorInt = AndroidColor.parseColor(selectedtextcolorhex)
+            val textColorInt = AndroidColor.parseColor(selectedtextcolorhex)
             val colorInt3 = AndroidColor.parseColor(accentcolor)
             rerunsetup.setBackgroundColor(colorInt)
             findViewById<TextView>(R.id.settingstitle).setTextColor(colorInt3)
@@ -75,23 +71,23 @@ class Settings : AppCompatActivity() {
             findViewById<Button>(R.id.reset).setBackgroundColor(colorInt)
             findViewById<Button>(R.id.ddg).setBackgroundColor(colorInt)
             findViewById<Button>(R.id.color).setBackgroundColor(colorInt)
-            findViewById<Button>(R.id.color).setTextColor(TextColorInt)
+            findViewById<Button>(R.id.color).setTextColor(textColorInt)
             useublock.setTextColor(colorInt3)
             useublock.thumbTintList = ColorStateList.valueOf(colorInt3)
             useublock.trackTintList = ColorStateList.valueOf(colorInt)
             findViewById<SwitchCompat>(R.id.urlwhere).setTextColor(colorInt2)
-            findViewById<Button>(R.id.save).setTextColor(TextColorInt)
-            findViewById<Button>(R.id.keyboard).setTextColor(TextColorInt)
-            findViewById<Button>(R.id.reset).setTextColor(TextColorInt)
-            findViewById<Button>(R.id.ddg).setTextColor(TextColorInt)
-            findViewById<Button>(R.id.keyboard).setTextColor(TextColorInt)
-            findViewById<Button>(R.id.close).setTextColor(TextColorInt)
+            findViewById<Button>(R.id.save).setTextColor(textColorInt)
+            findViewById<Button>(R.id.keyboard).setTextColor(textColorInt)
+            findViewById<Button>(R.id.reset).setTextColor(textColorInt)
+            findViewById<Button>(R.id.ddg).setTextColor(textColorInt)
+            findViewById<Button>(R.id.keyboard).setTextColor(textColorInt)
+            findViewById<Button>(R.id.close).setTextColor(textColorInt)
             findViewById<Button>(R.id.close).setBackgroundColor(colorInt3)
             findViewById<TextView>(R.id.madebyme).setTextColor(colorInt3)
             findViewById<SwitchCompat>(R.id.urlwhere).thumbTintList = ColorStateList.valueOf(colorInt3)
             findViewById<SwitchCompat>(R.id.urlwhere).trackTintList = ColorStateList.valueOf(colorInt)
             findViewById<EditText>(R.id.test).backgroundTintList = ColorStateList.valueOf(colorInt3)
-            rerunsetup.setTextColor(TextColorInt)
+            rerunsetup.setTextColor(textColorInt)
             urlwhere.isChecked = prefs[USER_URL_BAR] == "down"
             urlwhere.setOnCheckedChangeListener { _, isChecked ->
                 saveUrlBarPosition(if (isChecked) "down" else "top")
@@ -125,12 +121,11 @@ class Settings : AppCompatActivity() {
         findViewById<Button>(R.id.close).setOnClickListener {
             finish()
         }
-
         useublock.setOnCheckedChangeListener { _, isChecked ->
             useublock(if (isChecked) "of" else "on")
         }
         findViewById<Button>(R.id.color).setOnClickListener {
-            startActivity(android.content.Intent(this, ColorActivity::class.java))
+            startActivity(Intent(this, ColorActivity::class.java))
         }
         val portalogo = findViewById<ImageView>(R.id.portalogo)
         val portaschriftzug = findViewById<TextView>(R.id.portaschriftzug)

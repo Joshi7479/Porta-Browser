@@ -50,6 +50,7 @@
     <string name="textpreview"> </string>
     <string name="applycolor">Farben anwenden</string>
     <string name="welcomecolor">Möchtest du erstmal dein Farben einstellen?</string>
+    <string name="nothing"> </string>
     <string name="clearall">Alle löschen</string>
     <string name="privatemode">Inkognito-Modus</string>
     <string name="cookiehint">🍪 Hier kannst du die Cookies zurücksetzen. Mhmm... Lecker!</string>

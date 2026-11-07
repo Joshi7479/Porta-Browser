@@ -4,7 +4,6 @@ import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.graphics.Color as AndroidColor
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,14 +16,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import android.content.ContentValues.TAG
-import android.hardware.input.InputManager
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.view.WindowInsetsCompat
-import kotlinx.coroutines.flow.first
 import android.app.Activity
-import android.graphics.Color
 import androidx.core.view.WindowInsetsControllerCompat
 
 class Welcome : AppCompatActivity() {

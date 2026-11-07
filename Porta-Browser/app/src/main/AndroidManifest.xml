@@ -37,7 +37,5 @@
         <activity
             android:name=".ColorActivity"
             android:exported="false" />
-
     </application>
-
 </manifest>

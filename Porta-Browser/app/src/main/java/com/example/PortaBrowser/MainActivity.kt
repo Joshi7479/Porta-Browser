@@ -186,6 +186,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, getString(R.string.welcometitle), Toast.LENGTH_SHORT).show()
             sharedPref.edit().putBoolean("isFirstRun", false).apply()
         }
+
         cookiebutton = findViewById(R.id.cookie)
         geckoView = findViewById(R.id.webView)
         urlBar = findViewById(R.id.urlBar)
@@ -196,10 +197,13 @@ class MainActivity : AppCompatActivity() {
         topurl = findViewById(R.id.urltop)
         bottomBar = findViewById(R.id.bottomBar1)
         bookmark = findViewById(R.id.bookmarks)
+
         getRuntime()
+
         urlBar.setOnClickListener {
             urlBar.setText("")
         }
+
         urlBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO) {
                 hideKeyboard()
@@ -207,13 +211,16 @@ class MainActivity : AppCompatActivity() {
                 true
             } else false
         }
+
         urlBar2.setOnClickListener { urlBar2.setText("") }
+
         urlBar2.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO) {
                 loadInput(urlBar2.text.toString())
                 true
             } else false
         }
+
         val buttongit = findViewById<Button>(R.id.github)
         val buttonBack = findViewById<Button>(R.id.btnBack)
         val buttonReload = findViewById<Button>(R.id.btnReload)
@@ -236,10 +243,12 @@ class MainActivity : AppCompatActivity() {
             portalogo.visibility = View.GONE
             portaschriftzug.visibility = View.VISIBLE
         }
+
         portaschriftzug.setOnClickListener {
             portaschriftzug.visibility = View.GONE
             portalogo.visibility = View.VISIBLE
         }
+
         cookieclear.setOnClickListener {
             getRuntime().storageController.clearData(
                 StorageController.ClearFlags.COOKIES
@@ -259,9 +268,9 @@ class MainActivity : AppCompatActivity() {
         historyEmpty = findViewById(R.id.historyEmpty)
         val historyDone = findViewById<Button>(R.id.historydone)
         val historyClear = findViewById<Button>(R.id.historyclear)
-
         buttonhistory.setOnClickListener { setHistoryMode(true) }
         historyDone.setOnClickListener { setHistoryMode(false) }
+
         historyClear.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) { db.historyDao().deleteAll() }
         }
@@ -269,6 +278,7 @@ class MainActivity : AppCompatActivity() {
         bookmark.setOnClickListener { setBookmarkMode(true) }
         bookmarkdone.setOnClickListener { setBookmarkMode(false) }
         bookmarkadd.setOnClickListener { saveBookmarkFromInputs() }
+
         cookiebutton.setOnClickListener {
             tablerow.visibility = View.GONE
             tabBar.visibility = View.GONE
@@ -280,6 +290,7 @@ class MainActivity : AppCompatActivity() {
             buttonhide2.visibility = View.GONE
             buttonNewTab2.visibility = View.GONE
         }
+
         Cookiedone.setOnClickListener {
             tablerow.visibility = View.GONE
             tabBar.visibility = View.VISIBLE
@@ -291,44 +302,55 @@ class MainActivity : AppCompatActivity() {
             buttonhide2.visibility = View.VISIBLE
             buttonNewTab2.visibility = View.VISIBLE
         }
+
         alleButtons = listOf(
             buttonBack, buttonReload, buttonHome, buttonForward,
             buttonSettings, buttongit, bookmarkdone, bookmarkadd,
             bookmark, buttonhistory, cookiebutton, Cookiedone, cookieclear,
             historyDone, historyClear
         )
+
         andereButtons = listOf(
             buttonhide, buttonhide2, buttonNewTab2, buttonNewTab,
         )
+
         urlbars = listOf(
             urlBar, urlBar2,
         )
+
         buttongit.setOnClickListener {
             loadInput("github.com/Joshi7479/Porta-Browser")
             tablerow.visibility = View.GONE
         }
+
         buttonBack.setOnClickListener {
             currentTab?.let { if (it.canGoBack) it.session.goBack() }
         }
+
         buttonReload.setOnClickListener {
             currentTab?.session?.reload()
             tablerow.visibility = View.GONE
         }
+
         buttonHome.setOnClickListener {
             currentTab?.session?.loadUri(standart_suchmaschine_url)
             tablerow.visibility = View.GONE
         }
+
         buttonForward.setOnClickListener {
             currentTab?.let { if (it.canGoForward) it.session.goForward() }
         }
+
         buttonSettings.setOnClickListener {
             startActivity(Intent(this, Settings::class.java))
             tablerow.visibility = View.GONE
         }
+
         val toggleTabRow = View.OnClickListener {
             tablerow.visibility =
                 if (tablerow.visibility == View.VISIBLE) View.GONE else View.VISIBLE
         }
+
         buttonhide.setOnClickListener(toggleTabRow)
         buttonhide2.setOnClickListener(toggleTabRow)
         buttonNewTab.setOnClickListener { addTab(standart_suchmaschine_url) }
@@ -368,16 +390,19 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
     override fun onDestroy() {
         unregisterReceiver(cancelReceiver)
         super.onDestroy()
     }
+
     override fun onResume() {
         super.onResume()
         if (tabs.isNotEmpty()) {
             lifecycleScope.launch { applySettings() }
         }
     }
+
     private fun setHistoryMode(show: Boolean) {
         val browserVis = if (show) View.GONE else View.VISIBLE
         geckoView.visibility = browserVis
@@ -400,6 +425,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun installUblock(runtime: GeckoRuntime) {
         runtime.webExtensionController
             .ensureBuiltIn(
@@ -416,45 +442,54 @@ class MainActivity : AppCompatActivity() {
                 }
             )
     }
+
     private suspend fun applySettings() {
         try {
             val preferences = dataStore.data.first()
-
             val gespeicherteUrl = preferences[MEIN_STRING_KEY]
+
             if (!gespeicherteUrl.isNullOrEmpty() && gespeicherteUrl.startsWith("http")) {
                 standart_suchmaschine_url = gespeicherteUrl
             }
 
             val toporbottom = preferences[USER_URL_BAR]
+
             if (toporbottom == "top" || toporbottom == "down") {
                 urlwhere = toporbottom
             }
+
             updateUrlBarPosition()
+
             val gespeicherteFarbe = preferences[USER_COLOR_KEY]
             val gespeichertetextfarbe = preferences[USER_TEXT_COLOR_THEME]
             val gespeicherteFarbe2 = preferences[USER_COLOR2_KEY]
             val gespeicherteFarbe3 = preferences[USER_COLOR3_KEY]
+
             if (!gespeicherteFarbe.isNullOrEmpty()) {
                 val parsedColor = Color.parseColor(gespeicherteFarbe)
                 buttonColor = parsedColor
                 alleButtons.forEach { it.backgroundTintList = ColorStateList.valueOf(parsedColor) }
             }
+
             if (!gespeichertetextfarbe.isNullOrEmpty()) {
                 val parsedColor2 = Color.parseColor(gespeichertetextfarbe)
                 textcolor = parsedColor2
                 alleButtons.forEach { it.setTextColor(ColorStateList.valueOf(parsedColor2)) }
             }
+
             if (!gespeicherteFarbe2.isNullOrEmpty()) {
                 val parsedColor3 = Color.parseColor(gespeicherteFarbe2)
                 buttonColor2 = parsedColor3
-                andereButtons.forEach { it.backgroundTintList = ColorStateList.valueOf(parsedColor3) }
+                andereButtons.forEach { it.backgroundTintList = ColorStateList.valueOf(parsedColor3)}
             }
+
             if (!gespeicherteFarbe3.isNullOrEmpty()) {
                 val parsedColor4 = Color.parseColor(gespeicherteFarbe3)
                 buttonColor3 = parsedColor4
                 urlbars.forEach { it.backgroundTintList = ColorStateList.valueOf(parsedColor4) }
                 findViewById<TabLayout>(R.id.tabbar).setSelectedTabIndicatorColor(parsedColor4)
             }
+
         } catch (e: Exception) {
             Log.e(TAG, "applySettings failed", e)
         }
@@ -464,28 +499,39 @@ class MainActivity : AppCompatActivity() {
         topurl.visibility = if (top) View.VISIBLE else View.GONE
         bottomBar.visibility = if (top) View.GONE else View.VISIBLE
     }
+
     private fun loadInput(input: String) {
         val text = input.trim()
+
         if (text == "67") {
-            Toast.makeText(this, "Really?", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.really), Toast.LENGTH_SHORT).show()
         }
+
         if (text == "Hello World!") {
             Toast.makeText(this, "Hello World!", Toast.LENGTH_SHORT).show()
         }
+
         if (text == "Hello World") {
             Toast.makeText(this, "Hello World!", Toast.LENGTH_SHORT).show()
         }
+
         if (text.isEmpty()) return
+
         val url = when {
             text.startsWith("http://") || text.startsWith("https://") -> text
             text.contains(".") && !text.contains(" ") -> "https://$text"
             else -> standart_suchmaschine_url + "/search?q=" + Uri.encode(text)
         }
+
         currentTab?.session?.loadUri(url)
     }
+
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
+
     private fun loadBookmarks() {
+
         bookmarkList.clear()
+
         try {
             val json = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
                 .getString(BOOKMARKS_KEY, "[]") ?: "[]"
@@ -578,6 +624,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
             }
+
             val deleteBtn = Button(this).apply {
                 text = "✕"
                 layoutParams = LinearLayout.LayoutParams(dp(60), dp(50))
@@ -587,6 +634,7 @@ class MainActivity : AppCompatActivity() {
                     refreshBookmarkList()
                 }
             }
+
             buttonColor?.let {
                 val tint = ColorStateList.valueOf(it)
                 openBtn.backgroundTintList = tint
