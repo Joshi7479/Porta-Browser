@@ -64,4 +64,9 @@
     <string name="failed"> ist abgestürzt!</string>
     <string name="ublockof">Werbeblocker (UBlock Origin) ist aus!</string>
     <string name="ublockon">Werbeblocker (UBlock Origin) wurde erfolgreich aktiviert!</string>
+    <string name="download">Datei Herunterladen?</string>
+    <string name="downloadpos">Download starten</string>
+    <string name="downloadn">Abbruch</string>
+    <string name="downloadf">Download ist abgebrochen!</string>
+    <string name="unknownsize">Fehler: Unbekannte Größe</string>
 </resources>

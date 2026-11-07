@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
+        android:text="@string/nothing"
         android:visibility="gone"
         android:gravity="center"
         android:id="@+id/portaschriftzug"/>
@@ -30,7 +30,7 @@
         app:tabIndicatorColor="#00F0F0"
         app:tabMode="scrollable"
         app:tabSelectedTextColor="@android:color/white"
-        app:tabTextColor="#AAAAAA" />
+        app:tabTextColor="#AAAAAA" />3
 
     <LinearLayout
         android:id="@+id/urltop"

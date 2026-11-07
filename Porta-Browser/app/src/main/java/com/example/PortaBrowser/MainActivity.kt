@@ -2,13 +2,20 @@ package com.example.PortaBrowser
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.text.format.Formatter
+import java.io.IOException
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ensureActive
 import android.graphics.Color
 import org.mozilla.geckoview.GeckoRuntimeSettings
 import android.net.Uri
+import kotlinx.coroutines.delay
 import android.os.Bundle
+import android.provider.MediaStore
 import kotlinx.coroutines.runBlocking
 import android.text.TextUtils
 import android.util.Log
@@ -16,6 +23,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.webkit.URLUtil
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -38,11 +46,15 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
+import androidx.appcompat.app.AlertDialog
+import kotlinx.coroutines.withContext
 import org.mozilla.geckoview.GeckoResult
 import org.mozilla.geckoview.GeckoRuntime
 import org.mozilla.geckoview.GeckoSession
 import org.mozilla.geckoview.GeckoView
+import org.mozilla.geckoview.Image
 import org.mozilla.geckoview.StorageController
+import org.mozilla.geckoview.WebResponse
 
 class MainActivity : AppCompatActivity() {
 
@@ -92,6 +104,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var historyListContainer: LinearLayout
     private lateinit var historyEmpty: TextView
     private var historyJob: Job? = null
+    private var schriftoderlogo: String = "logo"
     private class BrowserTab(
         var url: String,
         var title: String = DEFAULT_TAB_TITLE
@@ -685,6 +698,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            override fun onExternalResponse(session: GeckoSession, response: WebResponse) {
+                handleDownload(response)
+            }
+
             override fun onFullScreen(session: GeckoSession, fullScreen: Boolean) {
                 if (tab === currentTab) setFullScreen(fullScreen)
             }
@@ -692,6 +709,134 @@ class MainActivity : AppCompatActivity() {
 
         return session
     }
+    private fun handleDownload(response: WebResponse) {
+        val contentDisposition = response.headers["content-disposition"]
+        val mimeType = response.headers["content-type"]
+            ?.substringBefore(';')?.trim()
+            ?: "application/octet-stream"
+        val fileName = sanitizeFileName(
+            URLUtil.guessFileName(response.uri, contentDisposition, mimeType)
+        )
+        val size = response.headers["content-length"]?.toLongOrNull()
+        val sizeText = size?.let { Formatter.formatShortFileSize(this, it) } ?: "unbekannte Größe"
+
+        if (isFinishing || isDestroyed) {
+            response.body?.close()
+            return
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.download))
+            .setMessage("$fileName\n($sizeText)")
+            .setPositiveButton(getString(R.string.downloadpos)) { _, _ ->
+                startDownload(response, fileName, mimeType, size)
+            }
+            .setNegativeButton(getString(R.string.downloadn)) { _, _ -> response.body?.close() }
+            .setOnCancelListener { response.body?.close() }
+            .show()
+    }
+
+    private fun startDownload(response: WebResponse, fileName: String, mimeType: String, totalSize: Long?) {
+        val body = response.body
+        if (body == null) {
+            Log.e(TAG, "Download: response.body ist null")
+            Toast.makeText(this, getString(R.string.downloadf), Toast.LENGTH_LONG).show()
+            return
+        }
+
+        val progressToast = Toast.makeText(this, "$fileName …", Toast.LENGTH_SHORT)
+        progressToast.show()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val resolver = contentResolver
+            val values = ContentValues().apply {
+                put(MediaStore.Downloads.DISPLAY_NAME, fileName)
+                put(MediaStore.Downloads.MIME_TYPE, mimeType)
+                put(MediaStore.Downloads.IS_PENDING, 1)
+            }
+
+            val uri = try {
+                resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+            } catch (e: Throwable) {
+                Log.e(TAG, "Download: MediaStore insert fehlgeschlagen", e)
+                null
+            }
+            if (uri == null) {
+                body.close()
+                withContext(Dispatchers.Main) {
+                    progressToast.cancel()
+                    Toast.makeText(this@MainActivity, getString(R.string.downloadf), Toast.LENGTH_LONG).show()
+                }
+                return@launch
+            }
+
+            try {
+                var downloaded = 0L
+                var lastUpdate = 0L
+
+                resolver.openOutputStream(uri)?.use { out ->
+                    body.use { input ->
+                        val buffer = ByteArray(64 * 1024)
+                        while (true) {
+                            ensureActive()
+                            val n = input.read(buffer)
+                            if (n < 0) break
+                            out.write(buffer, 0, n)
+                            downloaded += n
+
+                            val now = System.currentTimeMillis()
+                            if (now - lastUpdate >= 1000) {
+                                lastUpdate = now
+                                val current = downloaded
+                                val text = if (totalSize != null && totalSize > 0) {
+                                    val percent = (current * 100 / totalSize).toInt().coerceIn(0, 100)
+                                    "$fileName\n$percent % (" +
+                                            "${Formatter.formatShortFileSize(this@MainActivity, current)} / " +
+                                            "${Formatter.formatShortFileSize(this@MainActivity, totalSize)})"
+                                } else {
+                                    "$fileName\n${Formatter.formatShortFileSize(this@MainActivity, current)}"
+                                }
+                                withContext(Dispatchers.Main) {
+                                    progressToast.setText(text)
+                                    progressToast.show()
+                                }
+                            }
+                        }
+                    }
+                } ?: throw IOException("No Output-Stream")
+
+                values.clear()
+                values.put(MediaStore.Downloads.IS_PENDING, 0)
+                resolver.update(uri, values, null, null)
+
+                Log.d(TAG, "Download fertig: $downloaded Bytes")
+                withContext(Dispatchers.Main) {
+                    progressToast.cancel()
+                    Toast.makeText(
+                        this@MainActivity,
+                        getString(R.string.saved) + ": $fileName",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } catch (e: CancellationException) {
+                Log.w(TAG, "Download: abgebrochen", e)
+                resolver.delete(uri, null, null)
+                throw e
+            } catch (e: Throwable) {
+                Log.e(TAG, "Download fehlgeschlagen", e)
+                resolver.delete(uri, null, null)
+                withContext(Dispatchers.Main) {
+                    progressToast.cancel()
+                    Toast.makeText(this@MainActivity, getString(R.string.downloadf), Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun sanitizeFileName(name: String): String =
+        name.substringAfterLast('/').substringAfterLast('\\')
+            .replace("..", "_")
+            .ifBlank { "download" }
     private fun setFullScreen(enable: Boolean) {
         isFullScreen = enable
         val controller = WindowInsetsControllerCompat(window, window.decorView)
@@ -710,6 +855,14 @@ class MainActivity : AppCompatActivity() {
             findViewById<Button>(R.id.hide2).visibility = View.GONE
             findViewById<Button>(R.id.newtab).visibility = View.GONE
             findViewById<Button>(R.id.newtab2).visibility = View.GONE
+
+            if (findViewById<ImageView>(R.id.portalogo).visibility == View.VISIBLE) {
+                schriftoderlogo = "logo"
+            } else {
+                schriftoderlogo = "schrift"
+            }
+            findViewById<TextView>(R.id.portaschriftzug).visibility = View.GONE
+            findViewById<ImageView>(R.id.portalogo).visibility = View.GONE
         } else {
             controller.show(WindowInsetsCompat.Type.systemBars())
             tabBar.visibility = View.VISIBLE
@@ -717,6 +870,14 @@ class MainActivity : AppCompatActivity() {
             findViewById<View>(R.id.newtab).visibility = View.VISIBLE
             findViewById<View>(R.id.newtab2).visibility = View.VISIBLE
             updateUrlBarPosition()
+            if (schriftoderlogo == "schrift") {
+                findViewById<TextView>(R.id.portaschriftzug).visibility = View.VISIBLE
+                findViewById<ImageView>(R.id.portalogo).visibility = View.GONE
+            } else {
+                findViewById<TextView>(R.id.portaschriftzug).visibility = View.GONE
+                findViewById<ImageView>(R.id.portalogo).visibility = View.VISIBLE
+            }
+
         }
     }
     private fun setupTabBar() {
