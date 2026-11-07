@@ -9,6 +9,7 @@ import android.graphics.Color
 import org.mozilla.geckoview.GeckoRuntimeSettings
 import android.net.Uri
 import android.os.Bundle
+import kotlinx.coroutines.runBlocking
 import android.text.TextUtils
 import android.util.Log
 import android.view.Gravity
@@ -112,7 +113,16 @@ class MainActivity : AppCompatActivity() {
                 .build()
         ).also { runtime ->
             sRuntime = runtime
-            installUblock(runtime)
+            val preferences = runBlocking { dataStore.data.first() }
+            var ublockonorof: String = "on"
+            if (preferences[USER_UBLOCK_KEY] !== null) {
+              ublockonorof = preferences[USER_UBLOCK_KEY].toString()
+            }
+            if (ublockonorof == "on") {
+                installUblock(runtime)
+            } else {
+                Toast.makeText(this, "Ublock is deactivated!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -120,7 +130,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         val sharedPref = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val isFirstRun = sharedPref.getBoolean("isFirstRun", true)

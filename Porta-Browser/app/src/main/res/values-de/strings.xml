@@ -37,6 +37,7 @@
     <string name="resetcookies">Cookies zurücksetzen</string>
     <string name="historysymbol">📜</string>
     <string name="historytitle">Suchverlauf</string>
+    <string name="useublock">Werbeblocker deaktivieren (Tritt nach einem neustart in Kraft)</string>
     <string name="nohistory">Hier ist alles leer...</string>
     <string name="startporta">Die Farbe wird erst später angewendet...\n\nDu kannst alles später in den einstellungen ändern.\n\nWische, um mit Porta zu startent!</string>
     <string name="welcomesearchenginehint">Wenn du magst, kannst du hier erstmal die Standartsuchmaschiene ändern.\n(Leer lassen --> SearXNG)\n(z.B. example.com)</string>

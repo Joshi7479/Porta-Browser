@@ -124,6 +124,17 @@
             android:text="@string/urlpositionsethint"
             android:textColor="#F00000" />
 
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/useublock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:checked="false"
+            app:thumbTint="#F00000"
+            app:trackTint="@color/blue_A200"
+            android:text="@string/useublock"
+            android:textColor="#F00000" />
+
     </LinearLayout>
 
     <Button

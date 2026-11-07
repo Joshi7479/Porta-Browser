@@ -34,7 +34,7 @@ val USER_URL_BAR = stringPreferencesKey("user_url_bar")
 val USER_TEXT_COLOR_THEME = stringPreferencesKey("user_text_color_theme")
 val USER_COLOR2_KEY = stringPreferencesKey("user_color2")
 val USER_COLOR3_KEY = stringPreferencesKey("user_color3")
-val SOMETHING_CHANGED = stringPreferencesKey("changed")
+val USER_UBLOCK_KEY = stringPreferencesKey("ublock")
 
 class Settings : AppCompatActivity() {
 
@@ -50,6 +50,7 @@ class Settings : AppCompatActivity() {
 
         val searchEngineInput = findViewById<EditText>(R.id.test)
         val urlwhere = findViewById<SwitchCompat>(R.id.urlwhere)
+        val useublock = findViewById<SwitchCompat>(R.id.useublock)
         val rerunsetup = findViewById<Button>(R.id.rerunsetup)
         val inputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -75,6 +76,9 @@ class Settings : AppCompatActivity() {
             findViewById<Button>(R.id.ddg).setBackgroundColor(colorInt)
             findViewById<Button>(R.id.color).setBackgroundColor(colorInt)
             findViewById<Button>(R.id.color).setTextColor(TextColorInt)
+            useublock.setTextColor(TextColorInt)
+            useublock.thumbTintList = ColorStateList.valueOf(colorInt3)
+            useublock.trackTintList = ColorStateList.valueOf(colorInt)
             findViewById<SwitchCompat>(R.id.urlwhere).setTextColor(colorInt2)
             findViewById<Button>(R.id.save).setTextColor(TextColorInt)
             findViewById<Button>(R.id.keyboard).setTextColor(TextColorInt)
@@ -122,6 +126,9 @@ class Settings : AppCompatActivity() {
             finish()
         }
 
+        useublock.setOnCheckedChangeListener { _, isChecked ->
+            useublock(if (isChecked) "of" else "on")
+        }
         findViewById<Button>(R.id.color).setOnClickListener {
             startActivity(android.content.Intent(this, ColorActivity::class.java))
         }
@@ -178,6 +185,17 @@ class Settings : AppCompatActivity() {
             } catch (e: Exception) {
                 Log.e(TAG, "saveUrlBarPosition failed", e)
                 Toast.makeText(this@Settings, "Internal service: saveUrlBarPosition failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun useublock(onorof: String) {
+        lifecycleScope.launch {
+            try {
+                dataStore.edit { it[USER_UBLOCK_KEY] = onorof }
+                Toast.makeText(this@Settings, "Saved!", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Log.e(TAG, "useublock failed", e)
+                Toast.makeText(this@Settings, "Internal service: useUBlock failed", Toast.LENGTH_SHORT).show()
             }
         }
     }
