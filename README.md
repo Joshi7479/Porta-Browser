@@ -2,6 +2,8 @@
 # Porta-Browser
 Just. Simple. Browsing!
 
+Runs on Android 13 and newer.
+
 The name comes from the Latin word porta wich means door. Thank´s to my classmates which helped me finding this name!
 A free, opensource Android (other Versions are planned) browser with an minimalistic Design, but colorfull!.
 
