@@ -2,7 +2,7 @@
 # Porta-Browser
 Just. Simple. Browsing!
 
-Runs on Android 13 and newer.
+Runs on Android 13 and newer. Linux will be supported soon!
 
 The name comes from the Latin word porta wich means door. Thank´s to my classmates which helped me finding this name!
 A free, opensource Android (other Versions are planned) browser with an minimalistic Design, but colorfull!.
@@ -13,7 +13,7 @@ But for me, it is a really special thing. This browser is my way to learn how an
 And... It is not a boring browser. I wanted to make a browser that is less annoying, and I think it is. It is really minimalistic, but minimalistic should
 not mean black and white. There should be colors. And so is my browser. Basic features, User friendly UI, no AI-Assistent, not 100.000 settings, and at least UI-elements visible as posibble. Just. Simple. Browsing!
 
-Based on Gecko (The Engine behind Firefox), made in 100% Kotlin in Android Studio with XML.
+Based on Gecko (The Engine behind Firefox), made in 100% Kotlin in Android Studio with XML. The planned Linux Version will be based on chromium because Gecko is not really supported.
 
 Please notice, that this App is not and will not be available on the Google Play store. So you have to sideload it. Just download the APK from the releases and open it.
 
