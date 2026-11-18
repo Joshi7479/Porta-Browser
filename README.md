@@ -2,7 +2,7 @@
 # Porta-Browser
 Just. Simple. Browsing!
 
-Runs on Android 13 and newer. Linux will be supported soon! Visit:<a href=https://github.com/Joshi7479/Porta-Browser-Desktop> https://github.com/Joshi7479/Porta-Browser-for-Linux</a>!
+Runs on Android 13 and newer. Linux will be supported soon! Visit:<a href=https://github.com/Joshi7479/Porta-Browser-Desktop> https://github.com/Joshi7479/Porta-Browser-Desktop</a>!
 
 The name comes from the Latin word porta wich means door. Thank´s to my classmates which helped me finding this name!
 A free, opensource Android (other Versions are planned) browser with an minimalistic Design, but colorfull!.
