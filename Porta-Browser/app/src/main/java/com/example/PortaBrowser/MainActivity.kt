@@ -1054,7 +1054,7 @@ class MainActivity : AppCompatActivity() {
             val channel = NotificationChannel(
                 DOWNLOAD_CHANNEL,
                 getString(R.string.download_channel_name),
-                NotificationManager.IMPORTANCE_LOW   // kein Ton
+                NotificationManager.IMPORTANCE_LOW 
             )
             getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
         }
@@ -1083,7 +1083,7 @@ class MainActivity : AppCompatActivity() {
             .setContentText(text)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
-            .setProgress(100, percent ?: 0, percent == null)   // null = unbestimmt
+            .setProgress(100, percent ?: 0, percent == null)   
             .addAction(0, getString(R.string.download_cancel), cancelPending)
             .build()
     }
