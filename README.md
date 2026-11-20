@@ -28,4 +28,4 @@ But: If you use an program like Waydroid, you can use install it, if you don‘t
 Or you can do !9! steps in the Developer-Options including an 24 hour wait to unlock sideloading again (more informations on keepandroidopen.org).
 
 Porta-Browser
-Made by Joshi7479
+Made by <a href=https://github.com/Joshi7479>Joshi7479</a>
